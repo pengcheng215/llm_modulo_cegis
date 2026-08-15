@@ -1,0 +1,78 @@
+{
+  "action_convention": "action[t] = observation[t+1] - observation[t]; final action is zero",
+  "action_schema": [
+    {
+      "index": 0,
+      "name": "delta_x",
+      "unit": "m/step"
+    },
+    {
+      "index": 1,
+      "name": "delta_y",
+      "unit": "m/step"
+    }
+  ],
+  "action_shape": [
+    15,
+    100,
+    2
+  ],
+  "all_exported_trajectories_are": "expert_safe",
+  "dataset_name": "LLMConstraint-Obstacle2D-Expert",
+  "dataset_version": "1.0",
+  "formats": {
+    "evaluation_only_ground_truth": "private_evaluation/ground_truth.json",
+    "npz": "expert_trajectories.npz",
+    "pucl_rollouts": "files/EXPERT/rollouts/rollout_*.pkl",
+    "splits": "splits.json"
+  },
+  "horizon": 100,
+  "integrity": {
+    "expert_trajectories.npz": "38c5d17c0b5500d87ba7a2bb55602a5a5b911883a6976eb18407881235ec0c65",
+    "files/EXPERT/rollouts/rollout_0000.pkl": "ecedec98e87d7f666ce6b1a182b7706df17cdc0c14f870fbb39f355c5dac4c22",
+    "files/EXPERT/rollouts/rollout_0001.pkl": "8cf2e683bfd0b6337ff10986eeba71187f2c3c6af018c6f8c8cc618fb1310117",
+    "files/EXPERT/rollouts/rollout_0002.pkl": "a917efe66b05457a140f3ac2c88ef1a019c16a7fe7ce3959612de798d9de7621",
+    "files/EXPERT/rollouts/rollout_0003.pkl": "94ec5c6d10aab4b1fccfdee75ad4bec60822837f16a8a14c290e9903962d464a",
+    "files/EXPERT/rollouts/rollout_0004.pkl": "98695520f53473867ac180b775ff0490565b6602be522e0728ee6808b35c3563",
+    "files/EXPERT/rollouts/rollout_0005.pkl": "43ccdb94b043f24ceb3f027fa37c2d784160faa1c39e047819f85c7df9cf7e73",
+    "files/EXPERT/rollouts/rollout_0006.pkl": "5cbfa620c80b075e4d52c2f3ad609cd97cf6c47995a9b1441a6842ada46b9627",
+    "files/EXPERT/rollouts/rollout_0007.pkl": "51031c476962e6800d87d69c4b3874d7931cd544269a9416756f24f9f9bdec47",
+    "files/EXPERT/rollouts/rollout_0008.pkl": "f0002b147b80730903b838a23b554b6723cf9bf4707515b7a64e7cabd31a8a74",
+    "files/EXPERT/rollouts/rollout_0009.pkl": "e8017099d9657d0070e2464bfc2c78d20a8f9b59314e5269ea0b0001a7510915",
+    "files/EXPERT/rollouts/rollout_0010.pkl": "654a9bf8c5cce761d89792e863de4e1ff47eb3a6ef15e3b98156d9db537b48b6",
+    "files/EXPERT/rollouts/rollout_0011.pkl": "341d7d591c844b7bf4d50bcaad7798b2951385667e0018bf0d3c53b0055be384",
+    "files/EXPERT/rollouts/rollout_0012.pkl": "db7a0b7225f252332c07fd7989304d2fcdeb992ae3d7e34f178244771b58eb10",
+    "files/EXPERT/rollouts/rollout_0013.pkl": "fea584d4cf8411a44ae741d62c68f4f6ad9b04125f74f893ba7e0aab2ee9ca53",
+    "files/EXPERT/rollouts/rollout_0014.pkl": "f9f5d86c5ba4c21f403ab437054cabb93fb47d9df2c80e035f1cf39e2ed0b86b"
+  },
+  "learner_visible_files": [
+    "expert_trajectories.npz",
+    "files/EXPERT/rollouts/",
+    "splits.json"
+  ],
+  "n_trajectories": 15,
+  "observation_schema": [
+    {
+      "index": 0,
+      "name": "x_position",
+      "unit": "m"
+    },
+    {
+      "index": 1,
+      "name": "y_position",
+      "unit": "m"
+    }
+  ],
+  "observation_shape": [
+    15,
+    100,
+    2
+  ],
+  "seed": 0,
+  "source": "LLMConstraint-master/src/tasks/obstacle_2d.py",
+  "task_name": "obstacle_2d",
+  "trajectory_label_convention": {
+    "safe": 0,
+    "violation": 1
+  }
+}

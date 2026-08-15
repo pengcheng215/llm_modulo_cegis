@@ -1,0 +1,256 @@
+{
+  "collision_semantics": "continuous_piecewise_linear_polyline",
+  "constraint_type": "circular_exclusion_with_margin",
+  "generation_clearance_beyond_safety_radius": 0.01,
+  "generation_task_config": {
+    "endpoint_y_range": 1.6,
+    "goal_x": 9.5,
+    "goal_x_jitter": 0.35,
+    "max_abs_demo_y": 2.8,
+    "max_demo_attempts": 80,
+    "n_demos": 15,
+    "n_points_demo": 100,
+    "n_points_likelihood": 30,
+    "obstacle_center": [
+      5.0,
+      0.0
+    ],
+    "obstacle_radius": 1.0,
+    "safety_margin": 0.41000000000000003,
+    "start_x": 0.5,
+    "start_x_jitter": 0.35,
+    "workspace_x": [
+      0.0,
+      10.0
+    ],
+    "workspace_y": [
+      -4.0,
+      4.0
+    ]
+  },
+  "minimum_exported_segment_distance": 1.409012036732404,
+  "minimum_exported_waypoint_distance": 1.410009839018134,
+  "obstacle_center": [
+    5.0,
+    0.0
+  ],
+  "physical_obstacle_radius": 1.0,
+  "safe_label": 0,
+  "safe_predicate": "euclidean_distance(position, obstacle_center) >= safety_radius",
+  "safety_margin": 0.4,
+  "safety_radius": 1.4,
+  "trajectories": [
+    {
+      "goal": [
+        9.660758972167969,
+        1.162172555923462
+      ],
+      "min_segment_distance": 1.4091907742747367,
+      "min_waypoint_distance": 1.4100099871062126,
+      "side": "lower",
+      "start": [
+        0.1735098958015442,
+        -1.0379019975662231
+      ],
+      "trajectory_id": "rollout_0000"
+    },
+    {
+      "goal": [
+        9.505228996276855,
+        -1.303214430809021
+      ],
+      "min_segment_distance": 1.409012036732404,
+      "min_waypoint_distance": 1.410009839018134,
+      "side": "upper",
+      "start": [
+        0.47224873304367065,
+        0.9269303679466248
+      ],
+      "trajectory_id": "rollout_0001"
+    },
+    {
+      "goal": [
+        9.64909553527832,
+        0.4673440754413605
+      ],
+      "min_segment_distance": 1.4091797484711517,
+      "min_waypoint_distance": 1.410009956783401,
+      "side": "upper",
+      "start": [
+        0.15850256383419037,
+        0.6936022043228149
+      ],
+      "trajectory_id": "rollout_0002"
+    },
+    {
+      "goal": [
+        9.740878105163574,
+        -0.41977113485336304
+      ],
+      "min_segment_distance": 1.4092345786893161,
+      "min_waypoint_distance": 1.4100099578535867,
+      "side": "lower",
+      "start": [
+        0.6481344103813171,
+        0.5689560770988464
+      ],
+      "trajectory_id": "rollout_0003"
+    },
+    {
+      "goal": [
+        9.268991470336914,
+        -1.209912896156311
+      ],
+      "min_segment_distance": 1.4093536289079711,
+      "min_waypoint_distance": 1.4100099439272893,
+      "side": "lower",
+      "start": [
+        0.7767917513847351,
+        -1.1205902099609375
+      ],
+      "trajectory_id": "rollout_0004"
+    },
+    {
+      "goal": [
+        9.171372413635254,
+        -1.5109890699386597
+      ],
+      "min_segment_distance": 1.4389594949267583,
+      "min_waypoint_distance": 1.4389594949267583,
+      "side": "lower",
+      "start": [
+        0.815094530582428,
+        -1.3884471654891968
+      ],
+      "trajectory_id": "rollout_0005"
+    },
+    {
+      "goal": [
+        9.158336639404297,
+        -0.8335713148117065
+      ],
+      "min_segment_distance": 1.409221888279936,
+      "min_waypoint_distance": 1.4100099473356127,
+      "side": "upper",
+      "start": [
+        0.39757439494132996,
+        1.375704050064087
+      ],
+      "trajectory_id": "rollout_0006"
+    },
+    {
+      "goal": [
+        9.209736824035645,
+        -0.6681715250015259
+      ],
+      "min_segment_distance": 1.4092616959519566,
+      "min_waypoint_distance": 1.4100099550972647,
+      "side": "upper",
+      "start": [
+        0.5034226775169373,
+        -0.1632576435804367
+      ],
+      "trajectory_id": "rollout_0007"
+    },
+    {
+      "goal": [
+        9.41600513458252,
+        1.0488413572311401
+      ],
+      "min_segment_distance": 1.4090977018434494,
+      "min_waypoint_distance": 1.4100099475677823,
+      "side": "lower",
+      "start": [
+        0.265404611825943,
+        -1.5583754777908325
+      ],
+      "trajectory_id": "rollout_0008"
+    },
+    {
+      "goal": [
+        9.192877769470215,
+        -1.1311994791030884
+      ],
+      "min_segment_distance": 1.4104540517920845,
+      "min_waypoint_distance": 1.4104540517920845,
+      "side": "lower",
+      "start": [
+        0.32073721289634705,
+        0.3258396089076996
+      ],
+      "trajectory_id": "rollout_0009"
+    },
+    {
+      "goal": [
+        9.498625755310059,
+        -0.4882674217224121
+      ],
+      "min_segment_distance": 1.4092227744332675,
+      "min_waypoint_distance": 1.4100099634579202,
+      "side": "lower",
+      "start": [
+        0.1722407042980194,
+        -0.5411142706871033
+      ],
+      "trajectory_id": "rollout_0010"
+    },
+    {
+      "goal": [
+        9.237443923950195,
+        -0.837843656539917
+      ],
+      "min_segment_distance": 1.4100099545910394,
+      "min_waypoint_distance": 1.4100099545910394,
+      "side": "upper",
+      "start": [
+        0.2554418742656708,
+        -0.40544357895851135
+      ],
+      "trajectory_id": "rollout_0011"
+    },
+    {
+      "goal": [
+        9.170806884765625,
+        -1.2543950080871582
+      ],
+      "min_segment_distance": 1.4092165107384835,
+      "min_waypoint_distance": 1.41000992751159,
+      "side": "upper",
+      "start": [
+        0.37397271394729614,
+        0.6429058909416199
+      ],
+      "trajectory_id": "rollout_0012"
+    },
+    {
+      "goal": [
+        9.77645492553711,
+        -0.6529775261878967
+      ],
+      "min_segment_distance": 1.4091926041367422,
+      "min_waypoint_distance": 1.4100099907348076,
+      "side": "lower",
+      "start": [
+        0.2821045517921448,
+        -1.1088366508483887
+      ],
+      "trajectory_id": "rollout_0013"
+    },
+    {
+      "goal": [
+        9.7859468460083,
+        -0.16554057598114014
+      ],
+      "min_segment_distance": 1.4091730887442064,
+      "min_waypoint_distance": 1.410009972444786,
+      "side": "upper",
+      "start": [
+        0.3059413731098175,
+        0.8994027376174927
+      ],
+      "trajectory_id": "rollout_0014"
+    }
+  ],
+  "violation_label": 1,
+  "warning": "Evaluation-only ground truth. Do not expose this file to a constraint learner."
+}

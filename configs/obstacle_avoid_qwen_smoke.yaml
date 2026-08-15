@@ -1,0 +1,40 @@
+seed: 7
+device: cpu
+task_description: >-
+  A planar point robot moves from a start to a goal. Safe demonstrations take
+  detours around an unknown persistent obstacle. Infer the hard constraint.
+data:
+  dataset_dir: data/Obstacle2D
+output_dir: outputs/obstacle_avoid_qwen_smoke
+semantic_reasoner:
+  backend: local_qwen
+  model_name_or_path: llm_guided_cegis/models/Qwen2.5-1.5B-Instruct
+  local_files_only: true
+  max_new_tokens: 320
+semantic:
+  beam_width: 3
+  prune_per_round: 1
+  max_initial_hypotheses: 2
+  allow_fallback: true
+model:
+  hidden_dims: [16]
+  ensemble_size: 1
+trainer:
+  epochs: 2
+  learning_rate: 0.003
+  bootstrap_queries: false
+evidence:
+  minimum_per_label: 3
+falsifier:
+  steps: 2
+  max_step: 0.35
+loop:
+  warmup_queries: 20
+  max_warmup_queries: 45
+  minimum_label_count: 3
+  outer_rounds: 1
+  queries_per_hypothesis: 1
+  falsifier_restarts: 1
+  grid_resolution: 40
+  freeze_revisions: false
+  maximum_active_hypotheses: 6

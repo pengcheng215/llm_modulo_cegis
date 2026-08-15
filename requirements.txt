@@ -1,0 +1,6 @@
+numpy
+torch
+matplotlib
+PyYAML
+transformers>=4.37
+safetensors

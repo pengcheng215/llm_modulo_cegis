@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-modulo-cegis"
+version = "0.1.0"
+description = "Semantic--numeric CEGIS for inverse robot constraint learning"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy",
+  "torch",
+  "matplotlib",
+  "PyYAML",
+  "transformers>=4.37",
+  "safetensors",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,64 @@
+seed: 11
+device: cpu
+task_description: >-
+  A planar point robot moves from a start to a goal. Safe demonstrations make
+  detours around an unknown persistent obstacle. Infer the qualitative hard
+  constraint structure, use trajectory-level feedback to revise competing
+  hypotheses, and learn the numerical boundary without guessing its geometry.
+data:
+  dataset_dir: data/Obstacle2D
+output_dir: outputs/obstacle_avoid_qwen_test
+semantic_reasoner:
+  backend: local_qwen
+  model_name_or_path: llm_guided_cegis/models/Qwen2.5-1.5B-Instruct
+  local_files_only: true
+  max_new_tokens: 420
+semantic:
+  beam_width: 3
+  prune_per_round: 2
+  max_initial_hypotheses: 4
+  allow_fallback: true
+model:
+  hidden_dims: [32, 32]
+  ensemble_size: 3
+trainer:
+  epochs: 90
+  learning_rate: 0.0025
+  weight_decay: 0.00001
+  margin: 0.2
+  smoothmax_beta: 20.0
+  expert_weight: 2.0
+  query_weight: 1.0
+  violation_weight: 3.0
+  safe_state_weight: 1.0
+  latent_witness_weight: 1.5
+  latent_witness_fraction: 0.1
+  output_regularization: 0.0001
+  bootstrap_queries: true
+evidence:
+  minimum_per_label: 4
+  complexity_penalty: 0.015
+  uncertainty_penalty: 0.02
+falsifier:
+  steps: 100
+  learning_rate: 0.022
+  smoothmax_beta: 20.0
+  expert_weight: 0.3
+  smoothness_weight: 0.2
+  length_weight: 1.0
+  boundary_weight: 8.0
+  uncertainty_weight: 0.5
+  step_penalty_weight: 30.0
+  workspace_penalty_weight: 30.0
+  epsilon: 0.05
+  max_step: 0.35
+loop:
+  warmup_queries: 24
+  max_warmup_queries: 50
+  minimum_label_count: 4
+  outer_rounds: 2
+  queries_per_hypothesis: 1
+  falsifier_restarts: 2
+  grid_resolution: 110
+  freeze_revisions: false
+  maximum_active_hypotheses: 6

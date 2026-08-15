@@ -1,0 +1,23 @@
+{
+  "test": [
+    "rollout_0011",
+    "rollout_0006",
+    "rollout_0003"
+  ],
+  "train": [
+    "rollout_0001",
+    "rollout_0012",
+    "rollout_0007",
+    "rollout_0010",
+    "rollout_0014",
+    "rollout_0004",
+    "rollout_0005",
+    "rollout_0008",
+    "rollout_0000"
+  ],
+  "validation": [
+    "rollout_0009",
+    "rollout_0002",
+    "rollout_0013"
+  ]
+}
