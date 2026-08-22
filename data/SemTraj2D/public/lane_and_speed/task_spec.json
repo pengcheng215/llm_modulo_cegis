@@ -1,0 +1,142 @@
+{
+  "feature_library_version": "semtraj2d-12d-v1",
+  "feature_schema": [
+    {
+      "causal_status": "not_disclosed",
+      "description": "horizontal planar position",
+      "group": "position",
+      "high": 10.0,
+      "low": 0.0,
+      "name": "x_position",
+      "unit": "m"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "vertical planar position",
+      "group": "position",
+      "high": 4.0,
+      "low": -4.0,
+      "name": "y_position",
+      "unit": "m"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "finite-difference horizontal velocity",
+      "group": "velocity",
+      "high": 0.5,
+      "low": -0.5,
+      "name": "x_velocity",
+      "unit": "m/step"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "finite-difference vertical velocity",
+      "group": "velocity",
+      "high": 0.5,
+      "low": -0.5,
+      "name": "y_velocity",
+      "unit": "m/step"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "planar finite-difference speed magnitude",
+      "group": "velocity",
+      "high": 0.5,
+      "low": 0.0,
+      "name": "speed",
+      "unit": "m/step"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "finite-difference horizontal acceleration",
+      "group": "acceleration",
+      "high": 1.0,
+      "low": -1.0,
+      "name": "x_acceleration",
+      "unit": "m/step^2"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "finite-difference vertical acceleration",
+      "group": "acceleration",
+      "high": 1.0,
+      "low": -1.0,
+      "name": "y_acceleration",
+      "unit": "m/step^2"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "finite-difference acceleration magnitude",
+      "group": "acceleration",
+      "high": 1.0,
+      "low": 0.0,
+      "name": "acceleration_norm",
+      "unit": "m/step^2"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "sine of the instantaneous motion heading",
+      "group": "direction",
+      "high": 1.0,
+      "low": -1.0,
+      "name": "heading_sin",
+      "unit": "ratio"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "cosine of the instantaneous motion heading",
+      "group": "direction",
+      "high": 1.0,
+      "low": -1.0,
+      "name": "heading_cos",
+      "unit": "ratio"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "cumulative distance travelled from the start",
+      "group": "path_history",
+      "high": 20.0,
+      "low": 0.0,
+      "name": "path_length_so_far",
+      "unit": "m"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "normalized trajectory time",
+      "group": "time",
+      "high": 1.0,
+      "low": 0.0,
+      "name": "progress",
+      "unit": "ratio"
+    }
+  ],
+  "horizon": 100,
+  "learner_information_contract": [
+    "task_spec.json",
+    "expert_trajectories.npz",
+    "splits.json",
+    "whole-trajectory membership Oracle"
+  ],
+  "max_step": 0.35,
+  "schema_version": 1,
+  "start_goal_policy": "start in the left strip and goal in the right strip; exact endpoints vary by trajectory",
+  "suite_name": "SemTraj2D",
+  "suite_version": "1.1.0",
+  "task_description": "A planar point robot must remain inside an unknown horizontal operating lane and also respect an unknown maximum translational speed throughout the motion. A trajectory is invalid when either requirement is violated. Infer the feature-specific equality and inequality clauses and both numerical boundaries.",
+  "task_family": "lane_and_speed",
+  "task_instance_id": "lane_and_speed",
+  "trajectory_label_convention": {
+    "safe": 0,
+    "violation": 1
+  },
+  "workspace": {
+    "x": [
+      0.0,
+      10.0
+    ],
+    "y": [
+      -4.0,
+      4.0
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "action_shape": [
+    30,
+    100,
+    2
+  ],
+  "all_exported_trajectories_are": "expert_safe",
+  "dataset_name": "SemTraj2D-lane_and_speed",
+  "dataset_version": "1.1.0",
+  "horizon": 100,
+  "integrity": {
+    "expert_trajectories.npz": "4ee2c96829ef6feeaa891c077c7c0c1c40a7d99123b532d2d2f90ae4c0cca2a9",
+    "splits.json": "0430ccc7776a95cf9a9c3380a8803e4c63eb8741d2aa9998047da8e4396b8b5a",
+    "task_spec.json": "94dd22fa92169117551b533254b02b8e7105bb089cb9ecd632f735d2c5027b99"
+  },
+  "learner_visible_files": [
+    "expert_trajectories.npz",
+    "splits.json",
+    "task_spec.json"
+  ],
+  "n_expert_trajectories": 30,
+  "observation_shape": [
+    30,
+    100,
+    2
+  ],
+  "privacy_note": "No private path, clause, geometry, or numerical constraint parameter is listed here.",
+  "public_array_sha256": "740cc7a9782f2a2a1937868ea0680c3f45cc2e467dbf3738d565dbb4c39f7b67",
+  "public_generation_seed": 20260821,
+  "schema_version": 1,
+  "task_instance_id": "lane_and_speed"
+}

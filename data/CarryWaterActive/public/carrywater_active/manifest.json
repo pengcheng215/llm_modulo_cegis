@@ -1,0 +1,46 @@
+{
+  "action_shape": [
+    64,
+    119,
+    6
+  ],
+  "all_expert_trajectories_are": "known_safe",
+  "candidate_archive_has_labels": false,
+  "candidate_array_sha256": "1086e1eaf00ce66d37c71081f53baabe5328e61d211f840716f29ceeda784dc1",
+  "candidate_pool_is": "unlabeled",
+  "dataset_name": "CarryWaterActive",
+  "dataset_version": "1.0.0",
+  "expert_array_sha256": "cd3abae1706914dc70d099816ebeee1708cdbe3ee3247ed246dc39b9c8dbcb60",
+  "horizon": 120,
+  "integrity": {
+    "candidate_trajectories.npz": "b86a20b9077dc0d0f7863706087ec8741e9ec1784672d4659a681c22ce782ac4",
+    "dynamics_spec.json": "0890c5581d3dfcd75c9d18c4c4692acd0038350ee98879561ad67ebf70d8eae7",
+    "expert_trajectories.npz": "4a254aace483df5b2ed13a0b54f8f754a1800dd82ffb8bb19b7ec6e0deb69329",
+    "splits.json": "901fbfd3217542b6dcaf7d7c4f3db67f746ec8e62307eea6efa3468f9f2e4e17",
+    "task_spec.json": "87a45299956e54773dcbeb447c15e68e7ad1f0017942b593324b3c9e90010836"
+  },
+  "learner_visible_files": [
+    "task_spec.json",
+    "dynamics_spec.json",
+    "splits.json",
+    "expert_trajectories.npz",
+    "candidate_trajectories.npz",
+    "manifest.json"
+  ],
+  "n_expert_trajectories": 64,
+  "n_unlabeled_candidate_trajectories": 512,
+  "observation_shape": [
+    64,
+    120,
+    12
+  ],
+  "privacy_note": "No private seed, numerical safety boundary, Oracle label, or clause annotation for candidates is exported.",
+  "public_seed": 20260821,
+  "schema_version": 1,
+  "split_sizes": {
+    "test": 12,
+    "train": 40,
+    "validation": 12
+  },
+  "task_instance_id": "carrywater_active"
+}

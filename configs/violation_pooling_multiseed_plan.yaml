@@ -1,0 +1,99 @@
+schema_version: 1
+experiment_id: violation_pooling_source_anchor_mask_5seed
+created: 2026-08-17
+base_config: llm_modulo_cegis/configs/obstacle_avoid_gpt_diagnostic.yaml
+frozen_hypothesis_bank: llm_modulo_cegis/outputs/gpt_safe_acquisition_final/hypothesis_bank.json
+spatial_hypothesis_id: h_spatial_exclusion
+seeds: [7, 19, 37, 73, 109]
+
+arms:
+  classic_all_states:
+    trainer_bootstrap_queries: true
+    violation_pooling_mode: all_states
+    description: Classic label-stratified per-member query bootstrap with ordinary all-state MIL.
+  full_all_states:
+    trainer_bootstrap_queries: false
+    violation_pooling_mode: all_states
+    description: Every member sees the complete query buffer with ordinary all-state MIL.
+  full_source_anchor_mask:
+    trainer_bootstrap_queries: false
+    violation_pooling_mode: source_anchor_changed_states
+    description: Every member sees the complete buffer; source-model violations exclude selected-feature states unchanged from their known-safe anchor.
+
+controls:
+  device: cpu
+  semantic_backend: frozen_bank
+  freeze_revisions: true
+  falsifier_objective: hard_margin
+  false_unsafe_trust_radius: 0.32
+  false_unsafe_radius_ladder: []
+  violation_pooling_change_tolerance: 0.000001
+  safe_acquisition:
+    reserve_label_seeking_queries: true
+    minimum_safe_label_fraction: 0.40
+    minimum_violation_label_fraction: 0.35
+    maximum_label_balance_queries_per_round: 2
+  oracle_queries_per_run: 26
+  llm_interactions_per_run: 0
+  warmup_queries: 14
+  warmup_validation_per_label: 2
+  final_calibration_per_label: 2
+  trainable_query_records_per_run: 18
+  benchmark_warmup_labels: {safe: 8, violation: 6}
+  warmup_trajectory_hash_must_match_all_runs: true
+  pythonhashseed_matches_numeric_seed: true
+  torch_num_threads: 1
+  omp_num_threads: 1
+  mkl_num_threads: 1
+
+statistical_unit: numeric_seed
+paired_design: >-
+  Each seed uses the same frozen semantic bank, deterministic warmup slate,
+  hard single-0.32 falsifier, safe-query acquisition policy, Oracle budget,
+  code/input snapshot, and one CPU thread. Classic versus full changes only
+  trainer.bootstrap_queries. Full all-state versus full source-anchor-mask
+  changes only trainer.violation_pooling_mode.
+
+candidate_interpretation: >-
+  The mask uses only the source hypothesis, the paired known-safe expert, and
+  selected-feature change above a fixed 1e-6 normalized tolerance. It does not
+  use a state-level Oracle, private obstacle geometry, or a spatial feature
+  special case. It excludes causally unchanged states from source-matched
+  violation MIL but does not claim to identify the true violation timestep.
+
+primary_public_metrics:
+  - qualified_spatial_champion_seed_count
+  - spatial_final_public_safe_accuracy
+  - spatial_final_public_violation_recall
+  - spatial_final_public_expert_safe_rate
+  - spatial_final_public_fit_expert_safe_rate
+  - spatial_query_buffer_coverage
+  - source_anchor_masked_violation_count
+
+evaluation_only_diagnostics:
+  - champion_iou
+  - spatial_hypothesis_iou
+  - spatial_hypothesis_false_safe_rate
+  - spatial_hypothesis_false_unsafe_rate
+  - Private-geometry diagnostics are reported after selection and never enter the decision rule.
+
+decision_rule:
+  candidate: full_source_anchor_mask
+  baselines: [classic_all_states, full_all_states]
+  fallback: classic_all_states
+  minimum_candidate_qualified_spatial_champions: 4
+  require_candidate_strictly_exceeds_each_baseline: true
+  public_safety_floors:
+    spatial_safe_accuracy: 0.60
+    spatial_expert_safe_rate: 0.90
+    spatial_fit_expert_safe_rate: 0.90
+  floor_regression_definition: >-
+    A regression occurs when either paired baseline meets a public safety floor
+    for a seed and the candidate falls below that floor on the same seed.
+  reject_on_any_public_safety_floor_regression: true
+  select_candidate_if: >-
+    Select full_source_anchor_mask only if it produces at least four qualified
+    spatial champions out of five, its qualified-spatial count is strictly
+    larger than each baseline count, and it has no paired public safety-floor
+    regression against either baseline. Private IoU is excluded.
+

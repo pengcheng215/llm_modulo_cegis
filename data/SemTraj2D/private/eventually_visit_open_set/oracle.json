@@ -1,0 +1,20 @@
+{
+  "clauses": [
+    {
+      "center": [
+        4.892090888075614,
+        -0.101446304283248
+      ],
+      "clause_id": "checkpoint",
+      "kind": "checkpoint_visit",
+      "radius": 0.5090604510891434
+    }
+  ],
+  "composition": "any_violation",
+  "label_convention": {
+    "safe": 0,
+    "violation": 1
+  },
+  "schema_version": 1,
+  "warning": "Private analytic membership rule. Never expose to the semantic reasoner or learner."
+}

@@ -1,0 +1,99 @@
+schema_version: 3
+experiment_id: hard_single_032_vs_hard_ladder_5seed
+created: 2026-08-17
+base_config: llm_modulo_cegis/configs/obstacle_avoid_gpt_diagnostic.yaml
+frozen_hypothesis_bank: llm_modulo_cegis/outputs/gpt_safe_acquisition_final/hypothesis_bank.json
+seeds: [7, 19, 37, 73, 109]
+arms:
+  hard_single_032:
+    false_unsafe_use_hard_margin: true
+    false_unsafe_trust_radius: 0.32
+    false_unsafe_radius_ladder: []
+  hard_ladder:
+    false_unsafe_use_hard_margin: true
+    false_unsafe_trust_radius: 0.32
+    false_unsafe_radius_ladder: [0.04, 0.08, 0.16, 0.32]
+controls:
+  device: cpu
+  violation_pooling_mode: all_states
+  semantic_backend: frozen_bank
+  freeze_revisions: true
+  reserve_label_seeking_queries: true
+  oracle_queries_per_run: 26
+  pythonhashseed_matches_numeric_seed: true
+  omp_num_threads: 1
+  mkl_num_threads: 1
+  warmup_design: deterministic_paired_demo_relative
+  warmup_family_split: group_stratified_disjoint
+  warmup_queries: 14
+  benchmark_warmup_labels: {safe: 8, violation: 6}
+  warmup_trajectory_hash_must_match_all_runs: true
+statistical_unit: numeric_seed
+primary_metrics:
+  - oracle_safe_false_unsafe_count
+  - oracle_safe_budget_yield
+  - median_false_unsafe_query_max_expert_deviation
+secondary_metrics:
+  - conditional_oracle_safe_yield
+  - generation_crossing_count
+  - query_certified_count
+  - false_unsafe_optimizer_launches
+  - final_iou
+  - false_safe_rate
+  - false_unsafe_rate
+decision_rule:
+  default: hard_single_032
+  iou_guard:
+    median_paired_delta_min: -0.01
+    worst_seed_delta_min: -0.03
+  yield_stable:
+    strict_seed_wins_min: 4
+    pooled_safe_hits_must_be_strictly_higher: true
+  deformation_stable:
+    seed_reduction_fraction_min: 0.10
+    qualifying_seed_count_min: 4
+    paired_median_reduction_min: 0.10
+  yield_noninferior:
+    pooled_safe_hits_must_not_decrease: true
+    worse_seed_count_max: 1
+  deformation_noninferior:
+    worsening_fraction_threshold: 0.10
+    worse_seed_count_max: 1
+  select_ladder_if: >-
+    iou_guard AND ((yield_stable AND deformation_noninferior) OR
+    (deformation_stable AND yield_noninferior)); otherwise select hard_single_032.
+interpretation_limits:
+  - Five seeds support an engineering stability decision, not a claim of statistical significance.
+  - Queries within a seed are not independent statistical samples.
+  - Later candidate pools may diverge after the paired arms receive different Oracle labels.
+  - Optimizer launches and gradient updates are compute proxies; wall-clock is not a primary metric.
+  - A finite membership-only warmup cannot guarantee both labels for every possible Oracle;
+    this benchmark supplies known-safe demonstrations and empirically gives both labels.
+protocol_amendments:
+  - triggering_attempt: llm_modulo_cegis/outputs/falsifier_multiseed_5seed_v1
+    issue: >-
+      Both arms at seed 73 failed before model fitting because the former stochastic
+      warmup produced only 4 safe labels in 30 queries; seed 109 also required 19
+      warmup queries, so the planned fixed 26-query budget was not satisfied.
+    resolution: >-
+      Replace global-y random jitter with deterministic paired demo-relative probes:
+      one contracts the demonstrated detour toward its endpoint chord and one
+      continues the same detour. This uses only public demonstration geometry.
+    outcome_handling: >-
+      The incomplete v1 attempt is retained for audit and excluded. No v1 outcome
+      metric was used to change seeds, arms, primary metrics, or the decision rule.
+  - triggering_attempt: llm_modulo_cegis/outputs/falsifier_multiseed_5seed_v2
+    issue: >-
+      The deterministic candidates restored fixed 14-query warmup coverage, but the
+      old per-label tail splitter placed members of warmup pair families 2 and 3 in
+      different train/validation roles. This correlated-family leakage invalidates
+      model-selection metrics even though both arms received the same warmup slate.
+    resolution: >-
+      Assign each pair family wholly to training, structure validation, or threshold
+      calibration with a deterministic minimum-size group-stratified partition. The
+      sweep validator now checks pair-role isolation and byte-level equality of the
+      ordered warmup trajectory slate across all ten runs.
+    outcome_handling: >-
+      v2 is retained as an invalid diagnostic artifact and its selected_default is
+      cleared by validation. Its outcome was not used to change the five seeds,
+      arms, primary metrics, or decision rule. All ten runs restart in fresh v3 paths.

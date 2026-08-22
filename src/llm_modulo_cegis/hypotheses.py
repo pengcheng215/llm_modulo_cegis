@@ -12,9 +12,10 @@ from .types import InterventionSpec
 
 
 ALLOWED_COUPLINGS = {"joint", "independent"}
-ALLOWED_RELATIONS = {"forbidden_region", "upper_bound", "lower_bound"}
+ALLOWED_RELATIONS = {"forbidden_region", "upper_bound", "lower_bound", "equality_band"}
 ALLOWED_TEMPORAL_OPERATORS = {"max", "mean", "last"}
 ALLOWED_MODEL_FAMILIES = {"mlp", "linear"}
+ALLOWED_COMPOSITIONS = {"any_violation"}
 ALLOWED_ACTIONS = {
     "retain_and_query",
     "retire_hypothesis",
@@ -23,9 +24,38 @@ ALLOWED_ACTIONS = {
     "change_temporal_operator",
     "change_model_family",
     "split_hypothesis",
+    "compose_hypotheses",
     "add_hypothesis",
     "propose_intervention",
 }
+
+
+@dataclass(frozen=True)
+class ConstraintClause:
+    """One atomic violation predicate inside a possibly composite hypothesis."""
+
+    clause_id: str
+    variables: tuple[str, ...]
+    coupling: str
+    relation: str
+    temporal_operator: str
+    model_family: str
+    risk_direction: str
+    rationale: str
+
+    def to_dict(self) -> dict[str, Any]:
+        payload = asdict(self)
+        payload["variables"] = list(self.variables)
+        return payload
+
+    def signature(self) -> tuple[Any, ...]:
+        return (
+            self.variables,
+            self.coupling,
+            self.relation,
+            self.temporal_operator,
+            self.model_family,
+        )
 ALLOWED_INTERVENTIONS = {
     "model_false_safe",
     "model_false_unsafe",
@@ -50,20 +80,41 @@ class ConstraintHypothesis:
     rationale: str
     parent_id: str | None = None
     generation: int = 0
+    clauses: tuple[ConstraintClause, ...] = ()
+    composition: str = "any_violation"
 
     def to_dict(self) -> dict[str, Any]:
         payload = asdict(self)
         payload["variables"] = list(self.variables)
+        payload["clauses"] = [clause.to_dict() for clause in self.clauses]
         return payload
 
-    def signature(self) -> tuple[Any, ...]:
+    def atomic_clauses(self) -> tuple[ConstraintClause, ...]:
+        if self.clauses:
+            return self.clauses
         return (
-            self.variables,
-            self.coupling,
-            self.relation,
-            self.temporal_operator,
-            self.model_family,
+            ConstraintClause(
+                clause_id="c0",
+                variables=self.variables,
+                coupling=self.coupling,
+                relation=self.relation,
+                temporal_operator=self.temporal_operator,
+                model_family=self.model_family,
+                risk_direction=self.risk_direction,
+                rationale=self.rationale,
+            ),
         )
+
+    def signature(self) -> tuple[Any, ...]:
+        return (self.composition, tuple(clause.signature() for clause in self.atomic_clauses()))
+
+
+@dataclass(frozen=True)
+class CompiledClause:
+    clause: ConstraintClause
+    variable_indices: tuple[int, ...]
+    input_low: tuple[float, ...]
+    input_high: tuple[float, ...]
 
 
 @dataclass(frozen=True)
@@ -71,6 +122,7 @@ class CompiledHypothesis:
     hypothesis: ConstraintHypothesis
     input_low: tuple[float, ...]
     input_high: tuple[float, ...]
+    clauses: tuple[CompiledClause, ...] = ()
 
     @property
     def variables(self) -> tuple[str, ...]:
@@ -212,7 +264,7 @@ class HypothesisBank:
                 self.retire(action.target_hypothesis_id or "", outer_round=outer_round, reason=action.rationale)
                 for replacement in action.replacements:
                     self.add(replacement, outer_round=outer_round, reason="split_hypothesis")
-            elif action.action == "add_hypothesis":
+            elif action.action in {"add_hypothesis", "compose_hypotheses"}:
                 assert action.replacement is not None
                 self.add(action.replacement, outer_round=outer_round, reason=action.rationale)
             elif action.action == "propose_intervention":
@@ -238,6 +290,33 @@ class HypothesisBank:
         }
 
 
+def _validate_clause(clause: ConstraintClause, feature_library: FeatureLibrary) -> None:
+    if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_-]{0,31}", clause.clause_id):
+        raise ValueError("clause_id must be a short identifier")
+    if not clause.variables:
+        raise ValueError("constraint clause needs at least one variable")
+    if len(set(clause.variables)) != len(clause.variables):
+        raise ValueError("constraint clause variables must be unique")
+    feature_library.validate_variables(clause.variables)
+    if clause.coupling not in ALLOWED_COUPLINGS:
+        raise ValueError(f"unsupported coupling: {clause.coupling}")
+    if clause.relation not in ALLOWED_RELATIONS:
+        raise ValueError(f"unsupported relation: {clause.relation}")
+    if clause.temporal_operator not in ALLOWED_TEMPORAL_OPERATORS:
+        raise ValueError(f"unsupported temporal operator: {clause.temporal_operator}")
+    if clause.model_family not in ALLOWED_MODEL_FAMILIES:
+        raise ValueError(f"unsupported model family: {clause.model_family}")
+    if clause.coupling == "independent" and len(clause.variables) < 2:
+        raise ValueError("independent coupling requires at least two variables")
+    if clause.relation in {"upper_bound", "lower_bound", "equality_band"}:
+        if len(clause.variables) != 1 or clause.coupling != "joint":
+            raise ValueError("upper/lower/equality relations require one scalar variable with joint coupling")
+        if clause.model_family != "linear":
+            raise ValueError("scalar bound/equality heads use model_family=linear")
+    if not clause.risk_direction.strip() or not clause.rationale.strip():
+        raise ValueError("clause risk_direction and rationale cannot be empty")
+
+
 def validate_hypothesis(hypothesis: ConstraintHypothesis, feature_library: FeatureLibrary) -> None:
     if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_-]{1,63}", hypothesis.hypothesis_id):
         raise ValueError("hypothesis_id must be a short identifier")
@@ -246,19 +325,16 @@ def validate_hypothesis(hypothesis: ConstraintHypothesis, feature_library: Featu
     if len(set(hypothesis.variables)) != len(hypothesis.variables):
         raise ValueError("hypothesis variables must be unique")
     feature_library.validate_variables(hypothesis.variables)
-    if hypothesis.coupling not in ALLOWED_COUPLINGS:
-        raise ValueError(f"unsupported coupling: {hypothesis.coupling}")
-    if hypothesis.relation not in ALLOWED_RELATIONS:
-        raise ValueError(f"unsupported relation: {hypothesis.relation}")
-    if hypothesis.temporal_operator not in ALLOWED_TEMPORAL_OPERATORS:
-        raise ValueError(f"unsupported temporal operator: {hypothesis.temporal_operator}")
-    if hypothesis.model_family not in ALLOWED_MODEL_FAMILIES:
-        raise ValueError(f"unsupported model family: {hypothesis.model_family}")
-    if hypothesis.coupling == "independent" and len(hypothesis.variables) < 2:
-        raise ValueError("independent coupling requires at least two variables")
-    if hypothesis.relation in {"upper_bound", "lower_bound"}:
-        if len(hypothesis.variables) != 1 or hypothesis.coupling != "joint":
-            raise ValueError("upper_bound/lower_bound require one scalar variable with joint coupling")
+    if hypothesis.composition not in ALLOWED_COMPOSITIONS:
+        raise ValueError(f"unsupported composition: {hypothesis.composition}")
+    clauses = hypothesis.atomic_clauses()
+    if len({clause.clause_id for clause in clauses}) != len(clauses):
+        raise ValueError("clause ids must be unique within a hypothesis")
+    for clause in clauses:
+        _validate_clause(clause, feature_library)
+    clause_variables = {variable for clause in clauses for variable in clause.variables}
+    if clause_variables != set(hypothesis.variables):
+        raise ValueError("top-level variables must equal the union of clause variables")
     if not hypothesis.risk_direction.strip() or not hypothesis.rationale.strip():
         raise ValueError("risk_direction and rationale cannot be empty")
 
@@ -269,7 +345,19 @@ def compile_hypothesis(
 ) -> CompiledHypothesis:
     validate_hypothesis(hypothesis, feature_library)
     low, high = feature_library.bounds(hypothesis.variables)
-    return CompiledHypothesis(hypothesis, tuple(low), tuple(high))
+    variable_index = {name: index for index, name in enumerate(hypothesis.variables)}
+    compiled_clauses: list[CompiledClause] = []
+    for clause in hypothesis.atomic_clauses():
+        clause_low, clause_high = feature_library.bounds(clause.variables)
+        compiled_clauses.append(
+            CompiledClause(
+                clause=clause,
+                variable_indices=tuple(variable_index[name] for name in clause.variables),
+                input_low=tuple(clause_low),
+                input_high=tuple(clause_high),
+            )
+        )
+    return CompiledHypothesis(hypothesis, tuple(low), tuple(high), tuple(compiled_clauses))
 
 
 def validate_revision_action(
@@ -288,6 +376,7 @@ def validate_revision_action(
         "change_temporal_operator",
         "change_model_family",
         "add_hypothesis",
+        "compose_hypotheses",
     }
     if action.action in replacement_actions:
         if action.replacement is None:
@@ -307,6 +396,10 @@ def validate_revision_action(
             raise ValueError("intervention targets an unknown hypothesis")
         if action.intervention.variable is not None:
             feature_library.validate_variables((action.intervention.variable,))
+        if action.intervention.clause_id is not None:
+            target = bank.get(action.intervention.target_hypothesis_id)
+            if action.intervention.clause_id not in {clause.clause_id for clause in target.atomic_clauses()}:
+                raise ValueError("intervention targets an unknown clause")
 
 
 def hypothesis_from_dict(raw: dict[str, Any]) -> ConstraintHypothesis:
@@ -327,6 +420,12 @@ def hypothesis_from_dict(raw: dict[str, Any]) -> ConstraintHypothesis:
     variables = raw["variables"]
     if not isinstance(variables, list):
         raise ValueError("variables must be a JSON list")
+    raw_clauses = raw.get("clauses", [])
+    if raw_clauses is None:
+        raw_clauses = []
+    if not isinstance(raw_clauses, list):
+        raise ValueError("clauses must be a JSON list")
+    clauses = tuple(clause_from_dict(item) for item in raw_clauses)
     return ConstraintHypothesis(
         hypothesis_id=str(raw["hypothesis_id"]),
         name=str(raw["name"]),
@@ -339,6 +438,38 @@ def hypothesis_from_dict(raw: dict[str, Any]) -> ConstraintHypothesis:
         rationale=str(raw["rationale"]),
         parent_id=None if raw.get("parent_id") is None else str(raw["parent_id"]),
         generation=int(raw.get("generation", 0)),
+        clauses=clauses,
+        composition=str(raw.get("composition", "any_violation")),
+    )
+
+
+def clause_from_dict(raw: dict[str, Any]) -> ConstraintClause:
+    if not isinstance(raw, dict):
+        raise ValueError("each clause must be a JSON object")
+    required = {
+        "clause_id",
+        "variables",
+        "coupling",
+        "relation",
+        "temporal_operator",
+        "model_family",
+        "risk_direction",
+        "rationale",
+    }
+    missing = required - set(raw)
+    if missing:
+        raise ValueError(f"clause missing fields: {sorted(missing)}")
+    if not isinstance(raw["variables"], list):
+        raise ValueError("clause variables must be a JSON list")
+    return ConstraintClause(
+        clause_id=str(raw["clause_id"]),
+        variables=tuple(map(str, raw["variables"])),
+        coupling=str(raw["coupling"]),
+        relation=str(raw["relation"]),
+        temporal_operator=str(raw["temporal_operator"]),
+        model_family=str(raw["model_family"]),
+        risk_direction=str(raw["risk_direction"]),
+        rationale=str(raw["rationale"]),
     )
 
 
@@ -352,6 +483,7 @@ def revision_action_from_dict(raw: dict[str, Any]) -> RevisionAction:
             target_hypothesis_id=str(intervention_raw["target_hypothesis_id"]),
             kind=str(intervention_raw["kind"]),
             variable=None if intervention_raw.get("variable") is None else str(intervention_raw["variable"]),
+            clause_id=None if intervention_raw.get("clause_id") is None else str(intervention_raw["clause_id"]),
             preserve_endpoints=bool(intervention_raw.get("preserve_endpoints", True)),
             rationale=str(intervention_raw.get("rationale", "")),
         )

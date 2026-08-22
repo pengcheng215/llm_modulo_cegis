@@ -1,0 +1,202 @@
+{
+  "action_dimension": 6,
+  "action_horizon": "transition",
+  "dt": 0.05,
+  "feature_library_version": "carrywater_active_v1",
+  "feature_schema": [
+    {
+      "causal_status": "not_disclosed",
+      "description": "end-effector world x position",
+      "group": "position",
+      "high": 3.0,
+      "low": -3.0,
+      "name": "x_position",
+      "unit": "m"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "end-effector world y position",
+      "group": "position",
+      "high": 3.0,
+      "low": -3.0,
+      "name": "y_position",
+      "unit": "m"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "end-effector world z position",
+      "group": "position",
+      "high": 1.2,
+      "low": 0.1,
+      "name": "z_position",
+      "unit": "m"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "target x minus current x",
+      "group": "relative_position",
+      "high": 5.0,
+      "low": -5.0,
+      "name": "target_dx",
+      "unit": "m"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "target y minus current y",
+      "group": "relative_position",
+      "high": 5.0,
+      "low": -5.0,
+      "name": "target_dy",
+      "unit": "m"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "requested carrying height minus current z",
+      "group": "relative_position",
+      "high": 0.4,
+      "low": -0.4,
+      "name": "target_dz",
+      "unit": "m"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "observed horizontal x velocity",
+      "group": "velocity",
+      "high": 1.5,
+      "low": -1.5,
+      "name": "x_velocity",
+      "unit": "m/s"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "observed horizontal y velocity",
+      "group": "velocity",
+      "high": 1.5,
+      "low": -1.5,
+      "name": "y_velocity",
+      "unit": "m/s"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "observed vertical velocity",
+      "group": "velocity",
+      "high": 1.5,
+      "low": -1.5,
+      "name": "z_velocity",
+      "unit": "m/s"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "three-dimensional translational speed magnitude",
+      "group": "velocity",
+      "high": 2.0,
+      "low": 0.0,
+      "name": "speed",
+      "unit": "m/s"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "signed cup roll angle",
+      "group": "orientation",
+      "high": 0.8,
+      "low": -0.8,
+      "name": "roll",
+      "unit": "rad"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "signed cup pitch angle",
+      "group": "orientation",
+      "high": 0.8,
+      "low": -0.8,
+      "name": "pitch",
+      "unit": "rad"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "signed cup yaw angle",
+      "group": "orientation",
+      "high": 3.2,
+      "low": -3.2,
+      "name": "yaw",
+      "unit": "rad"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "absolute cup roll angle",
+      "group": "orientation",
+      "high": 0.8,
+      "low": 0.0,
+      "name": "abs_roll",
+      "unit": "rad"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "absolute cup pitch angle",
+      "group": "orientation",
+      "high": 0.8,
+      "low": 0.0,
+      "name": "abs_pitch",
+      "unit": "rad"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "cup tilt angle from vertical derived from roll and pitch",
+      "group": "orientation",
+      "high": 1.0,
+      "low": 0.0,
+      "name": "tilt_from_vertical",
+      "unit": "rad"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "maximum absolute roll or pitch",
+      "group": "orientation",
+      "high": 0.8,
+      "low": 0.0,
+      "name": "tilt_linf",
+      "unit": "rad"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "normalized trajectory time",
+      "group": "time",
+      "high": 1.0,
+      "low": 0.0,
+      "name": "progress",
+      "unit": "ratio"
+    }
+  ],
+  "horizon": 120,
+  "learner_information_contract": {
+    "dynamics_file": "dynamics_spec.json",
+    "known_safe_archive": "expert_trajectories.npz",
+    "phase_sidecar": "phase_ids",
+    "reference_sidecar": "reference_xyz",
+    "unlabeled_membership_candidates": "candidate_trajectories.npz"
+  },
+  "max_step": 0.10392304845413264,
+  "raw_state_dimension": 12,
+  "schema_version": 2,
+  "start_goal_policy": "varied direction, target height, and phase duration; endpoints remain inside the public workspace",
+  "suite_name": "CarryWaterActive",
+  "suite_version": "1.0.0",
+  "task_description": "Carry an open cup through lift, transport, and placement while following the requested height reference. Motion should remain gentle regardless of travel direction, and the cup should remain upright; rotation about the vertical axis is allowed. Infer the qualitative constraint structure and learn its unknown numerical boundaries.",
+  "task_family": "carry_water_active",
+  "task_instance_id": "carrywater_active",
+  "trajectory_adapter": "carrywater_active_v1",
+  "trajectory_label_convention": {
+    "safe": 0,
+    "violation": 1
+  },
+  "workspace": {
+    "x": [
+      -1.5,
+      1.5
+    ],
+    "y": [
+      -1.5,
+      1.5
+    ]
+  }
+}

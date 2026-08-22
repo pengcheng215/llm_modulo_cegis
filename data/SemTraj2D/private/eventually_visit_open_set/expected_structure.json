@@ -1,0 +1,6 @@
+{
+  "clauses": [],
+  "composition": "eventually",
+  "reason": "eventual existential visit is outside max/mean/last violation aggregation",
+  "representable": false
+}

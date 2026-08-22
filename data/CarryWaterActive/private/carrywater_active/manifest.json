@@ -1,0 +1,26 @@
+{
+  "clause_violation_counts": {
+    "height": 224,
+    "speed": 224,
+    "tilt": 224
+  },
+  "evaluation_array_sha256": "ae36f8ab54236e5440cab6a372d3bbc9bb21ff2ee658c63c14195ca2e67b1b7d",
+  "group_counts": {
+    "height_only": 128,
+    "multi_clause": 128,
+    "safe_counterfactual": 512,
+    "speed_only": 128,
+    "tilt_only": 128
+  },
+  "integrity": {
+    "evaluation_trajectories.npz": "42795056bff14e40b64518f382f1190cd308c9b225b18794f8d14932cb14da6c",
+    "expected_structure.json": "7c05a990bd1e0ee2710bf8a1c492b55e312be67bf49f584c63660a93a1504ac9",
+    "oracle.json": "578722ca6f94a5f777051fd38edc7ca7a410afe0f18382f0a91152c958f18a54"
+  },
+  "safe_count": 512,
+  "schema_version": 1,
+  "task_instance_id": "carrywater_active",
+  "trajectory_count": 1024,
+  "violation_count": 512,
+  "warning": "Private Oracle/evaluation bundle; never mount as learner input."
+}

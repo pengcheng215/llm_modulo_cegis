@@ -1,0 +1,20 @@
+seed: 7
+device: cpu
+data:
+  dataset_dir: llm_modulo_cegis/data/SemTraj2D/public/lane_and_speed
+output_dir: outputs/semtraj2d_lane_speed_gpt_semantic
+semantic_reasoner:
+  backend: openai
+  model: gpt-5.6
+  reasoning_effort: medium
+  max_output_tokens: 4000
+semantic:
+  beam_width: 4
+  prune_per_round: 1
+  max_initial_hypotheses: 6
+  allow_fallback: false
+  max_composite_clauses: 3
+trainer: {}
+loop: {}
+falsifier: {}
+evidence: {}

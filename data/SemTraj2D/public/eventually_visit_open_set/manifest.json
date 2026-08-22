@@ -1,0 +1,32 @@
+{
+  "action_shape": [
+    30,
+    100,
+    2
+  ],
+  "all_exported_trajectories_are": "expert_safe",
+  "dataset_name": "SemTraj2D-eventually_visit_open_set",
+  "dataset_version": "1.1.0",
+  "horizon": 100,
+  "integrity": {
+    "expert_trajectories.npz": "fd33caca5b1c07ec924a925fdc63801a344121921e49bf6bf3f9f970a5bf1492",
+    "splits.json": "c0a2b12a803cfbe3ea73878b131f9d9d9207f3899a04e7421c98c6aefe6482ab",
+    "task_spec.json": "5a9576bb5b86524cdec7a64d195bd53b6153a7431f77424558835dcc89b98996"
+  },
+  "learner_visible_files": [
+    "expert_trajectories.npz",
+    "splits.json",
+    "task_spec.json"
+  ],
+  "n_expert_trajectories": 30,
+  "observation_shape": [
+    30,
+    100,
+    2
+  ],
+  "privacy_note": "No private path, clause, geometry, or numerical constraint parameter is listed here.",
+  "public_array_sha256": "5a02093db916ddc43b6174d11ee75d0904538cbc0551e580c119c640d5bbf0cd",
+  "public_generation_seed": 20260821,
+  "schema_version": 1,
+  "task_instance_id": "eventually_visit_open_set"
+}

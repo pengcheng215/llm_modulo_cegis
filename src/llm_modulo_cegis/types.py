@@ -14,7 +14,13 @@ VIOLATION_LABEL = 1
 
 @dataclass
 class Trajectory:
-    """A fixed-horizon planar trajectory visible to the learner."""
+    """A fixed-horizon trajectory visible to the learner.
+
+    ``states`` may be a compact planar waypoint representation or a richer
+    observation vector.  ``actions`` are optional and may be state-aligned
+    (``T`` rows) or transition-aligned (``T-1`` rows); the numeric learner
+    deliberately consumes only learner-visible state features.
+    """
 
     states: np.ndarray
     actions: np.ndarray | None = None
@@ -23,16 +29,22 @@ class Trajectory:
 
     def __post_init__(self) -> None:
         self.states = np.asarray(self.states, dtype=np.float32)
-        if self.states.ndim != 2 or self.states.shape[0] < 2 or self.states.shape[1] != 2:
-            raise ValueError("states must have shape [T, 2], T >= 2")
+        if self.states.ndim != 2 or self.states.shape[0] < 2 or self.states.shape[1] < 2:
+            raise ValueError("states must have shape [T, D], T >= 2 and D >= 2")
         if not np.all(np.isfinite(self.states)):
             raise ValueError("states contain non-finite values")
         if self.actions is not None:
             self.actions = np.asarray(self.actions, dtype=np.float32)
-            if self.actions.shape != self.states.shape:
-                raise ValueError("actions must have the same shape as states")
-        if self.dt <= 0.0:
-            raise ValueError("dt must be positive")
+            if (
+                self.actions.ndim != 2
+                or self.actions.shape[0] not in {self.states.shape[0], self.states.shape[0] - 1}
+                or self.actions.shape[1] < 1
+            ):
+                raise ValueError("actions must have shape [T,A] or [T-1,A], A >= 1")
+            if not np.all(np.isfinite(self.actions)):
+                raise ValueError("actions contain non-finite values")
+        if not np.isfinite(self.dt) or self.dt <= 0.0:
+            raise ValueError("dt must be finite and positive")
 
     def copy(self) -> "Trajectory":
         return Trajectory(
@@ -54,6 +66,7 @@ class QueryRecord:
     source_hypothesis_id: str | None = None
     predictions_before_query: dict[str, int] = field(default_factory=dict)
     scores_before_query: dict[str, float] = field(default_factory=dict)
+    uncertainties_before_query: dict[str, float] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.label not in (SAFE_LABEL, VIOLATION_LABEL):
@@ -67,6 +80,7 @@ class QueryRecord:
             "source_hypothesis_id": self.source_hypothesis_id,
             "predictions_before_query": self.predictions_before_query,
             "scores_before_query": self.scores_before_query,
+            "uncertainties_before_query": self.uncertainties_before_query,
             "trajectory_metadata": self.trajectory.metadata,
         }
 
@@ -113,6 +127,20 @@ class HypothesisEvidence:
     complexity: int
     selection_score: float
     evidence_sufficient: bool
+    parameter_count: int = 0
+    prequential_count: int = 0
+    query_priority: float = 0.0
+    fit_expert_safe_rate: float = 1.0
+    champion_eligible: bool = True
+    ineligibility_reasons: tuple[str, ...] = ()
+    representation_group_count: int = 0
+    contradictory_representation_group_count: int = 0
+    linear_max_support_pair_count: int = 0
+    linear_max_support_contradiction_count: int = 0
+    linear_max_support_distinct_anchor_count: int = 0
+    linear_max_support_unresolved_pair_count: int = 0
+    linear_max_support_gate_triggered: bool = False
+    linear_max_support_gate_applied: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -125,9 +153,9 @@ class InterventionSpec:
     target_hypothesis_id: str
     kind: str
     variable: str | None = None
+    clause_id: str | None = None
     preserve_endpoints: bool = True
     rationale: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
-

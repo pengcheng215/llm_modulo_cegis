@@ -4,3 +4,4 @@ matplotlib
 PyYAML
 transformers>=4.37
 safetensors
+openai>=1.0

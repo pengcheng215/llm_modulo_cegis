@@ -1,0 +1,50 @@
+{
+  "class_counts": {
+    "safe": 336,
+    "violation": 336
+  },
+  "clause_violation_counts": {
+    "spatial": 254,
+    "speed": 141
+  },
+  "evaluation_array_sha256": "1f764a1f38bc42a65757f40dfb5dce0a56f36b556f3fafb4bea4937a60e5dece",
+  "group_class_counts": {
+    "boundary": {
+      "safe": 48,
+      "violation": 48
+    },
+    "counterfactual": {
+      "safe": 48,
+      "violation": 48
+    },
+    "id": {
+      "safe": 48,
+      "violation": 48
+    },
+    "multi_clause": {
+      "safe": 48,
+      "violation": 48
+    },
+    "ood": {
+      "safe": 48,
+      "violation": 48
+    },
+    "spatial_only": {
+      "safe": 48,
+      "violation": 48
+    },
+    "speed_only": {
+      "safe": 48,
+      "violation": 48
+    }
+  },
+  "integrity": {
+    "evaluation_trajectories.npz": "4a0b42a908c1e1a4f3a4b7f2831cb7b53143c4e1705b3b18f31c7dbfefca8ad2",
+    "expected_structure.json": "73b4d7e1a3062fea61c67edd0f2e3809b7af3a0995fcfdd4e419a8549b929b28",
+    "oracle.json": "a78e19215dbcd4b6ef7163dc5fb3a2b60256b39821624aa4b8c90a3f51b49784"
+  },
+  "n_evaluation_trajectories": 672,
+  "schema_version": 1,
+  "task_instance_id": "disk_and_speed",
+  "warning": "Private evaluation bundle; mount only after the learned model and champion are frozen."
+}

@@ -1,0 +1,15 @@
+{
+  "clauses": [
+    {
+      "coupling": "joint",
+      "model_family": "linear",
+      "relation": "equality_band",
+      "temporal_operator": "max",
+      "variables": [
+        "y_position"
+      ]
+    }
+  ],
+  "composition": "any_violation",
+  "representable": true
+}

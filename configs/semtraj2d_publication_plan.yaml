@@ -1,0 +1,64 @@
+protocol_version: 1
+suite: SemTraj2D
+suite_version: 1.1.0
+status: preregistration_template_not_completed_results
+
+hidden_instance_public_seeds: [20260821, 20260822, 20260823, 20260824, 20260825]
+private_seed_policy: independent_secret_at_least_128_bits_per_instance
+numeric_seeds: [7, 19, 37, 73, 109]
+
+representable_tasks:
+  - disk_clean
+  - disk_upper_proxy
+  - diagonal_halfspace
+  - lane_band
+  - speed_limit
+  - disk_and_speed
+  - lane_and_speed
+open_set_tasks:
+  - eventually_visit_open_set
+
+oracle_budget:
+  primary_total_queries: 32
+  curve_queries: [0, 8, 16, 24, 32]
+  includes_warmup_queries: true
+  share_answers_across_all_hypotheses: true
+
+baselines:
+  - id: full_gpt_llm_modulo_cegis
+    description: live multi-round semantic revision plus shared acquisition
+  - id: one_shot_gpt_frozen_bank
+    description: the same GPT round-zero bank with revisions frozen
+  - id: no_llm_typed_cegis
+    description: exhaustive preregistered typed bank with the same beam and query budget
+  - id: all_feature_joint_mlp
+    description: one capacity-heavy hypothesis over all features with the same labels and budget
+  - id: oracle_structure_ceiling
+    description: correct typed structure but no numerical boundary parameters
+
+primary_metrics:
+  - trajectory_worst_group_balanced_accuracy_at_q32
+  - trajectory_auprc_at_q32
+  - trajectory_false_safe_rate_at_q32
+  - performance_query_auc_q0_to_q32
+  - exact_typed_structure_recovery
+  - paired_disk_clean_to_proxy_degradation
+  - composite_min_isolated_clause_violation_recall
+  - open_set_correct_inconclusive_rate
+
+fairness_requirements:
+  same_public_task_description: true
+  same_experts_per_task_instance: true
+  same_total_oracle_calls: true
+  same_candidate_optimization_budget: true
+  freeze_semantic_bank_across_numeric_seeds: true
+  private_evaluation_only_after_freeze_manifest: true
+  official_evaluator_scores_only_frozen_champion: true
+  separate_public_private_mounts: true
+
+reporting:
+  statistical_unit: hidden_task_instance
+  confidence_interval: instance_level_bootstrap_95_percent
+  report_each_numeric_seed: true
+  report_wall_time_llm_calls_tokens_and_optimizer_launches: true
+  aggregate_open_set_separately: true

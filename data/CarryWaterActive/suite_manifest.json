@@ -1,0 +1,18 @@
+{
+  "generator_runtime": {
+    "numpy": "1.23.3",
+    "python": "3.8.20"
+  },
+  "information_contract": {
+    "learner_root": "public/carrywater_active/",
+    "membership_oracle_backing_file": "private/carrywater_active/oracle.json",
+    "posthoc_evaluator_root": "private/carrywater_active/"
+  },
+  "private_root": "private/carrywater_active/",
+  "public_manifest_sha256": "d1641a115cad9a1a915aa53ef5a2033a34ad1df0b2958883677e63de4e868f4f",
+  "public_root": "public/carrywater_active/",
+  "schema_version": 1,
+  "suite_name": "CarryWaterActive",
+  "suite_version": "1.0.0",
+  "task_instance_id": "carrywater_active"
+}

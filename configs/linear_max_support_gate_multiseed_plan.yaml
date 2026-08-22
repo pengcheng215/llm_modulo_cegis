@@ -1,0 +1,145 @@
+schema_version: 1
+experiment_id: linear_max_support_gate_audit_vs_enforced_5seed
+created: 2026-08-17
+base_config: llm_modulo_cegis/configs/obstacle_avoid_gpt_diagnostic.yaml
+frozen_hypothesis_bank: llm_modulo_cegis/outputs/gpt_safe_acquisition_final/hypothesis_bank.json
+spatial_hypothesis_id: h_spatial_exclusion
+affine_hypothesis_id: h_affine_spatial
+seeds: [1007, 1019, 1037, 1073, 1109]
+
+arms:
+  audit_only:
+    linear_max_support_gate_enforced: false
+    cli_flag: --audit-only-linear-max-support-gate
+    description: Compute the public convex-support certificate but do not let it change champion eligibility.
+  enforced:
+    linear_max_support_gate_enforced: true
+    cli_flag: --enforce-linear-max-support-gate
+    description: Compute the same certificate and exclude a certified linear-max hypothesis from champion selection.
+
+controls:
+  device: cpu
+  semantic_backend: frozen_bank
+  freeze_revisions: true
+  trainer_bootstrap_queries: false
+  violation_pooling_mode: source_anchor_changed_states
+  violation_pooling_change_tolerance: 0.000001
+  falsifier_objective: hard_margin
+  false_unsafe_trust_radius: 0.32
+  false_unsafe_radius_ladder: []
+  linear_max_support_tolerance: 0.00001
+  linear_max_minimum_contradictory_anchors: 2
+  safe_acquisition:
+    reserve_label_seeking_queries: true
+    minimum_safe_label_fraction: 0.40
+    minimum_violation_label_fraction: 0.35
+    maximum_label_balance_queries_per_round: 2
+  oracle_queries_per_run: 26
+  llm_interactions_per_run: 0
+  warmup_queries: 14
+  warmup_validation_per_label: 2
+  final_calibration_per_label: 2
+  trainable_query_records_per_run: 18
+  benchmark_warmup_labels: {safe: 8, violation: 6}
+  warmup_trajectory_hash_must_match_all_runs: true
+  paired_full_oracle_slate_must_match: true
+  pythonhashseed_matches_numeric_seed: true
+  torch_num_threads: 1
+  omp_num_threads: 1
+  mkl_num_threads: 1
+
+statistical_unit: numeric_seed
+paired_design: >-
+  Each seed uses the same frozen semantic bank, deterministic warmup slate,
+  hard single-0.32 falsifier, safe-query acquisition, 26-query Oracle budget,
+  complete trainable query buffer, source-anchor changed-state pooling, and
+  code/input snapshot. The sole arm treatment is whether an otherwise identical
+  linear-max convex-support certificate is enforced during champion selection.
+  Within each seed, the complete ordered 26-query observations, actions,
+  labels, and outer-round arrays must hash identically across arms.
+
+certificate_interpretation: >-
+  For a scalar affine score followed by trajectory max, a candidate whose
+  selected-feature points all lie inside a known-safe anchor's convex hull
+  cannot have a larger maximum score than that anchor for any parameters.
+  Repeated Oracle-violation contradictions from two distinct safe anchors are
+  therefore a public structural certificate, not private obstacle geometry.
+
+primary_public_metrics:
+  - spatial_evidence_eligible_seed_count
+  - qualified_spatial_champion_seed_count
+  - qualified_final_champion_seed_count
+  - affine_linear_max_support_pair_count
+  - affine_linear_max_support_contradiction_count
+  - affine_linear_max_support_distinct_anchor_count
+  - affine_linear_max_support_gate_triggered
+  - affine_linear_max_support_gate_applied
+  - champion_safe_accuracy
+  - champion_violation_recall
+  - champion_expert_safe_rate
+  - champion_fit_expert_safe_rate
+
+evaluation_only_diagnostics:
+  - champion_iou
+  - spatial_hypothesis_iou
+  - spatial_hypothesis_false_safe_rate
+  - spatial_hypothesis_false_unsafe_rate
+  - Private-geometry diagnostics are reported after selection and never enter the decision rule.
+
+decision_rule:
+  candidate: enforced
+  baseline: audit_only
+  fallback: audit_only
+  minimum_candidate_spatial_evidence_eligible_seeds: 5
+  minimum_candidate_qualified_spatial_champions: 4
+  require_candidate_qualified_count_at_least_baseline: true
+  require_gate_triggered_in_all_runs: true
+  minimum_distinct_contradictory_anchors: 2
+  require_candidate_gate_applied_in_all_runs: true
+  require_baseline_gate_not_applied_in_all_runs: true
+  reject_candidate_certified_affine_champion: true
+  paired_rescue_requires_qualified_spatial_champion: true
+  require_all_candidate_final_champions_qualified: true
+  require_finite_unit_interval_public_rates: true
+  public_champion_floors:
+    champion_safe_accuracy: 0.60
+    champion_violation_recall: 0.55
+    champion_expert_safe_rate: 0.90
+    champion_fit_expert_safe_rate: 0.90
+  reject_on_any_paired_threshold_crossing_regression: true
+  decision_input_allowlist:
+    - arm
+    - seed
+    - champion
+    - selection_status
+    - champion_eligible
+    - qualified_spatial_champion
+    - spatial_evidence_eligible
+    - champion_safe_accuracy
+    - champion_violation_recall
+    - champion_expert_safe_rate
+    - champion_fit_expert_safe_rate
+    - affine_linear_max_support_pair_count
+    - affine_linear_max_support_contradiction_count
+    - affine_linear_max_support_distinct_anchor_count
+    - affine_linear_max_support_unresolved_pair_count
+    - affine_linear_max_support_gate_triggered
+    - affine_linear_max_support_gate_applied
+  select_candidate_if: >-
+    Select enforced only after all 10 artifacts and treatment isolation validate;
+    enforced has spatial evidence eligible in 5/5 seeds and at least four
+    qualified spatial champions; its qualified-spatial count is no lower than
+    audit_only; both arms trigger the affine certificate with at least two
+    distinct anchors in every run, while only enforced applies it; enforced
+    never selects a certified affine model and rescues every paired audit-only
+    certified-affine selection with a qualified spatial champion; every
+    enforced champion is qualified and meets all public floors; and no paired
+    public floor changes from pass to fail. Private geometry is excluded.
+
+interpretation_limits:
+  - Five fixed seeds support an engineering stability decision, not statistical significance.
+  - A tied qualified-spatial count may justify adopting a sound structural guard, but is not evidence of a performance improvement.
+  - Later active-query pools may diverge because enforcement can change champion selection.
+  - The convex-support certificate is sufficient but intentionally incomplete.
+  - Queries within a seed are not independent samples.
+  - The experiment adds neither Oracle nor LLM calls.

@@ -1,0 +1,129 @@
+seed: 7
+device: cpu
+task_description: >-
+  A planar point robot moves from a start to a goal. Safe demonstrations take
+  detours both above and below an unknown persistent obstacle. Infer which
+  observed or derived variables define the hard trajectory constraint and learn
+  its numerical boundary. Do not assume that the absence of demonstrations in a
+  region proves that region infeasible.
+data:
+  dataset_dir: llm_modulo_cegis/data/Obstacle2D
+output_dir: outputs/obstacle_avoid_gpt_diagnostic
+semantic_reasoner:
+  backend: openai
+  model: gpt-5.6
+  reasoning_effort: medium
+  max_output_tokens: 4000
+semantic:
+  beam_width: 4
+  prune_per_round: 1
+  max_initial_hypotheses: 6
+  allow_fallback: true
+  simplicity_tolerance: 0.04
+  minimum_composition_gain: 0.05
+  max_composite_clauses: 3
+model:
+  hidden_dims: [32, 32]
+  ensemble_size: 2
+trainer:
+  epochs: 80
+  learning_rate: 0.003
+  weight_decay: 0.00001
+  margin: 0.2
+  smoothmax_beta: 20.0
+  expert_weight: 3.0
+  query_weight: 1.0
+  violation_weight: 2.0
+  safe_state_weight: 1.5
+  latent_witness_weight: 1.5
+  latent_witness_fraction: 0.1
+  latent_witness_mode: source_model
+  violation_pooling_mode: source_anchor_changed_states
+  violation_pooling_change_tolerance: 0.000001
+  output_regularization: 0.0001
+  bootstrap_queries: false
+  bootstrap_ensure_full_coverage: false
+evidence:
+  linear_max_support_gate_enforced: true
+  linear_max_support_tolerance: 0.00001
+  linear_max_minimum_contradictory_anchors: 2
+  minimum_per_label: 4
+  complexity_penalty: 0.015
+  capacity_penalty: 0.010
+  uncertainty_penalty: 0.02
+  champion_minimum_safe_accuracy: 0.60
+  champion_minimum_violation_recall: 0.55
+  champion_minimum_expert_safe_rate: 0.90
+  champion_minimum_fit_expert_safe_rate: 0.90
+  prequential_window_rounds: 2
+  nested_minimum_balanced_accuracy_gain: 0.08
+  progress_proxy_minimum_balanced_accuracy_gain: 0.08
+  dynamics_proxy_minimum_balanced_accuracy_gain: 0.20
+  intervention_yield_selection_weight: 0.03
+  representation_collision_tolerance: 0.00001
+  representation_collision_penalty: 1.0
+falsifier:
+  steps: 60
+  learning_rate: 0.025
+  smoothmax_beta: 20.0
+  expert_weight: 0.3
+  smoothness_weight: 0.2
+  length_weight: 1.0
+  boundary_weight: 8.0
+  uncertainty_weight: 0.5
+  step_penalty_weight: 30.0
+  workspace_penalty_weight: 30.0
+  feature_stress_weight: 0.15
+  epsilon: 0.05
+  max_step: 0.35
+  false_unsafe_trust_radius: 0.32
+  false_unsafe_use_hard_margin: true
+  false_unsafe_anchor_margin: 0.02
+  false_unsafe_hard_margin: 0.05
+  false_unsafe_smooth_margin_weight: 0.25
+  false_unsafe_gradient_tolerance: 0.00000001
+  false_unsafe_radius_ladder: []
+loop:
+  warmup_queries: 14
+  max_warmup_queries: 30
+  minimum_label_count: 4
+  minimum_safe_query_count: 5
+  minimum_violation_query_count: 5
+  warmup_validation_safe_count: 2
+  warmup_validation_violation_count: 2
+  final_calibration_safe_count: 2
+  final_calibration_violation_count: 2
+  expert_structure_validation: 4
+  outer_rounds: 3
+  queries_per_hypothesis: 0
+  oracle_query_budget_per_round: 4
+  candidate_pool_per_hypothesis: 3
+  query_hypothesis_beam: 4
+  candidate_history_deduplication_rms: 0.0001
+  minimum_safe_label_fraction: 0.40
+  minimum_violation_label_fraction: 0.35
+  reserve_label_seeking_queries: true
+  maximum_label_balance_queries_per_round: 2
+  safe_query_boundary_bisection_steps: 12
+  safe_query_boundary_scan_points: 32
+  safe_query_boundary_margin: 0.02
+  falsifier_restarts: 2
+  grid_resolution: 70
+  freeze_revisions: false
+  maximum_active_hypotheses: 6
+  finalize_qualified_champion: true
+  finalization_epochs: 160
+  finalization_minimum_expert_safe_rate: 0.95
+  finalization_minimum_calibration_safe_accuracy: 0.50
+  finalization_minimum_calibration_violation_recall: 0.50
+  finalization_minimum_calibration_balanced_accuracy: 0.60
+  finalization_allowed_calibration_drop: 0.02
+  finalization_minimum_calibration_per_label: 2
+  finalization_minimum_selection_per_label: 2
+  finalization_scratch_restarts: 3
+  finalization_finetune_incumbent: true
+  finalization_finetune_epochs: 80
+  finalization_finetune_learning_rate_scale: 0.25
+  finalization_finetune_background_weights: [0.0, 0.03, 0.10, 0.25]
+  finalization_unsafe_volume_probe_count: 1024
+  finalization_disable_latent_witness: false

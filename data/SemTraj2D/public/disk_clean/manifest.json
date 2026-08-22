@@ -1,0 +1,32 @@
+{
+  "action_shape": [
+    30,
+    100,
+    2
+  ],
+  "all_exported_trajectories_are": "expert_safe",
+  "dataset_name": "SemTraj2D-disk_clean",
+  "dataset_version": "1.1.0",
+  "horizon": 100,
+  "integrity": {
+    "expert_trajectories.npz": "181fed99b325acada23344f89766edf4e36d32efa9e19317dce19dcd1b01992b",
+    "splits.json": "5ee729e7ebae49f609ae8abc46f05f8bbb2c4fa300ce1c68fbb37b7a280938dd",
+    "task_spec.json": "3b6642ef52a16a33d69ca65691c6f1601c5d1ccc9ebccd766f0ce0aa79ffba3e"
+  },
+  "learner_visible_files": [
+    "expert_trajectories.npz",
+    "splits.json",
+    "task_spec.json"
+  ],
+  "n_expert_trajectories": 30,
+  "observation_shape": [
+    30,
+    100,
+    2
+  ],
+  "privacy_note": "No private path, clause, geometry, or numerical constraint parameter is listed here.",
+  "public_array_sha256": "e0d1dfa9a81fc8fbfe04aecc40e5d54ed840488ea1f1ab538fd995d407ebbc0b",
+  "public_generation_seed": 20260821,
+  "schema_version": 1,
+  "task_instance_id": "disk_clean"
+}

@@ -1,0 +1,20 @@
+{
+  "clauses": [
+    {
+      "clause_id": "diagonal",
+      "kind": "linear_halfspace",
+      "normal": [
+        -0.27875106276782236,
+        1.0
+      ],
+      "offset": 0.13376747267262293
+    }
+  ],
+  "composition": "any_violation",
+  "label_convention": {
+    "safe": 0,
+    "violation": 1
+  },
+  "schema_version": 1,
+  "warning": "Private analytic membership rule. Never expose to the semantic reasoner or learner."
+}

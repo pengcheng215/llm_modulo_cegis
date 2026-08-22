@@ -1,0 +1,32 @@
+{
+  "action_shape": [
+    30,
+    100,
+    2
+  ],
+  "all_exported_trajectories_are": "expert_safe",
+  "dataset_name": "SemTraj2D-disk_upper_proxy",
+  "dataset_version": "1.1.0",
+  "horizon": 100,
+  "integrity": {
+    "expert_trajectories.npz": "bd459947d52964ef2a051c3b2acaab1eed426c0f4d8308b7c308fe3af7eb68d3",
+    "splits.json": "5ee729e7ebae49f609ae8abc46f05f8bbb2c4fa300ce1c68fbb37b7a280938dd",
+    "task_spec.json": "943464712815edd4c91dcc526d8dbaa4557247e802c56e72d552637587a1beb9"
+  },
+  "learner_visible_files": [
+    "expert_trajectories.npz",
+    "splits.json",
+    "task_spec.json"
+  ],
+  "n_expert_trajectories": 30,
+  "observation_shape": [
+    30,
+    100,
+    2
+  ],
+  "privacy_note": "No private path, clause, geometry, or numerical constraint parameter is listed here.",
+  "public_array_sha256": "e65b754887ec15d7332833de7785c222e4f892c38ddae43eee0a1e6fe81757bb",
+  "public_generation_seed": 20260821,
+  "schema_version": 1,
+  "task_instance_id": "disk_upper_proxy"
+}

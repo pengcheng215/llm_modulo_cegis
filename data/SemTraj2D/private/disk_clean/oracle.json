@@ -1,0 +1,20 @@
+{
+  "clauses": [
+    {
+      "center": [
+        5.076551126894362,
+        0.008547484171059994
+      ],
+      "clause_id": "spatial",
+      "kind": "circle_exclusion",
+      "radius": 1.3741749578325209
+    }
+  ],
+  "composition": "any_violation",
+  "label_convention": {
+    "safe": 0,
+    "violation": 1
+  },
+  "schema_version": 1,
+  "warning": "Private analytic membership rule. Never expose to the semantic reasoner or learner."
+}

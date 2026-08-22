@@ -1,0 +1,240 @@
+{
+  "action_dimension": 6,
+  "action_schema": [
+    {
+      "description": "world-frame x acceleration command",
+      "high": 2.0,
+      "index": 0,
+      "low": -2.0,
+      "name": "ax",
+      "unit": "m/s^2"
+    },
+    {
+      "description": "world-frame y acceleration command",
+      "high": 2.0,
+      "index": 1,
+      "low": -2.0,
+      "name": "ay",
+      "unit": "m/s^2"
+    },
+    {
+      "description": "world-frame z acceleration command",
+      "high": 2.0,
+      "index": 2,
+      "low": -2.0,
+      "name": "az",
+      "unit": "m/s^2"
+    },
+    {
+      "description": "roll angular-rate command",
+      "high": 1.5,
+      "index": 3,
+      "low": -1.5,
+      "name": "omega_roll",
+      "unit": "rad/s"
+    },
+    {
+      "description": "pitch angular-rate command",
+      "high": 1.5,
+      "index": 4,
+      "low": -1.5,
+      "name": "omega_pitch",
+      "unit": "rad/s"
+    },
+    {
+      "description": "yaw angular-rate command",
+      "high": 1.5,
+      "index": 5,
+      "low": -1.5,
+      "name": "omega_yaw",
+      "unit": "rad/s"
+    }
+  ],
+  "derived_feature_schema": [
+    {
+      "causal_status": "not_disclosed",
+      "description": "three-dimensional translational speed magnitude",
+      "formula": "sqrt(vx^2 + vy^2 + vz^2)",
+      "high": 2.0784609690826525,
+      "inputs": [
+        "vx",
+        "vy",
+        "vz"
+      ],
+      "low": 0.0,
+      "name": "speed",
+      "unit": "m/s"
+    },
+    {
+      "causal_status": "not_disclosed",
+      "description": "angle between the cup vertical axis and world vertical, invariant to yaw",
+      "formula": "acos(cos(roll) * cos(pitch))",
+      "high": 3.141592653589793,
+      "inputs": [
+        "roll",
+        "pitch"
+      ],
+      "low": 0.0,
+      "name": "tilt_from_vertical",
+      "unit": "rad"
+    }
+  ],
+  "dt": 0.05,
+  "horizon": 120,
+  "invalid_episode_policy": "reject before a membership query is counted",
+  "membership_input_contract": "one dynamically valid full episode with public reference and phase context",
+  "observation_dimension": 12,
+  "observation_schema": [
+    {
+      "description": "cup world-frame x position",
+      "group": "position",
+      "high": 1.5,
+      "index": 0,
+      "low": -1.5,
+      "name": "world_x",
+      "unit": "m"
+    },
+    {
+      "description": "cup world-frame y position",
+      "group": "position",
+      "high": 1.5,
+      "index": 1,
+      "low": -1.5,
+      "name": "world_y",
+      "unit": "m"
+    },
+    {
+      "description": "cup world-frame z position",
+      "group": "position",
+      "high": 1.2,
+      "index": 2,
+      "low": 0.2,
+      "name": "world_z",
+      "unit": "m"
+    },
+    {
+      "description": "current public task-reference x minus cup x",
+      "group": "reference_relative",
+      "high": 3.1,
+      "index": 3,
+      "low": -3.1,
+      "name": "target_dx",
+      "unit": "m"
+    },
+    {
+      "description": "current public task-reference y minus cup y",
+      "group": "reference_relative",
+      "high": 3.1,
+      "index": 4,
+      "low": -3.1,
+      "name": "target_dy",
+      "unit": "m"
+    },
+    {
+      "description": "current public task-reference z minus cup z",
+      "group": "reference_relative",
+      "high": 1.0,
+      "index": 5,
+      "low": -1.0,
+      "name": "target_dz",
+      "unit": "m"
+    },
+    {
+      "description": "cup world-frame x velocity",
+      "group": "velocity",
+      "high": 1.2,
+      "index": 6,
+      "low": -1.2,
+      "name": "vx",
+      "unit": "m/s"
+    },
+    {
+      "description": "cup world-frame y velocity",
+      "group": "velocity",
+      "high": 1.2,
+      "index": 7,
+      "low": -1.2,
+      "name": "vy",
+      "unit": "m/s"
+    },
+    {
+      "description": "cup world-frame z velocity",
+      "group": "velocity",
+      "high": 1.2,
+      "index": 8,
+      "low": -1.2,
+      "name": "vz",
+      "unit": "m/s"
+    },
+    {
+      "description": "cup roll angle",
+      "group": "orientation",
+      "high": 3.141592653589793,
+      "index": 9,
+      "low": -3.141592653589793,
+      "name": "roll",
+      "unit": "rad"
+    },
+    {
+      "description": "cup pitch angle",
+      "group": "orientation",
+      "high": 3.141592653589793,
+      "index": 10,
+      "low": -3.141592653589793,
+      "name": "pitch",
+      "unit": "rad"
+    },
+    {
+      "description": "cup yaw angle",
+      "group": "orientation",
+      "high": 3.141592653589793,
+      "index": 11,
+      "low": -3.141592653589793,
+      "name": "yaw",
+      "unit": "rad"
+    }
+  ],
+  "phase_context": {
+    "mapping": {
+      "0": "lift",
+      "1": "transport",
+      "2": "place"
+    },
+    "note": "phase is public task context and an evaluation stratum, not an extra observation dimension",
+    "sidecar": "phase_ids"
+  },
+  "public_dynamics": {
+    "orientation_update": "angles_next = wrap(angles + dt * angular_rate)",
+    "position_update": "p_next = p + dt * v_next",
+    "reference_high": [
+      1.6,
+      1.6,
+      1.2
+    ],
+    "reference_low": [
+      -1.6,
+      -1.6,
+      0.2
+    ],
+    "timing": "observation[t] -- action[t] --> observation[t+1]",
+    "velocity_component_limit": 1.2,
+    "velocity_decay": 0.98,
+    "velocity_update": "v_next = clip(velocity_decay * v + dt * acceleration, componentwise)",
+    "workspace_high": [
+      1.5,
+      1.5,
+      1.2
+    ],
+    "workspace_low": [
+      -1.5,
+      -1.5,
+      0.2
+    ]
+  },
+  "reference_context": {
+    "consistency": "observation[3:6] == reference_xyz - observation[0:3]",
+    "sidecar": "reference_xyz"
+  },
+  "schema_version": 1,
+  "task_instance_id": "carrywater_active"
+}
