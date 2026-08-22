@@ -1,0 +1,16 @@
+seed: 7
+device: cpu
+data:
+  dataset_dir: llm_modulo_cegis/data/SemTraj2D/public/disk_upper_proxy
+output_dir: outputs/semtraj2d_semantic_only
+semantic_reasoner:
+  backend: evidence_policy
+semantic:
+  beam_width: 3
+  prune_per_round: 2
+  max_initial_hypotheses: 5
+  allow_fallback: false
+trainer: {}
+loop: {}
+falsifier: {}
+evidence: {}

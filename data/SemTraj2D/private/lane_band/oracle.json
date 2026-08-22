@@ -1,0 +1,18 @@
+{
+  "clauses": [
+    {
+      "center": -0.05790056519022895,
+      "clause_id": "lane",
+      "half_width": 0.791443557742104,
+      "kind": "equality_band",
+      "variable": "y_position"
+    }
+  ],
+  "composition": "any_violation",
+  "label_convention": {
+    "safe": 0,
+    "violation": 1
+  },
+  "schema_version": 1,
+  "warning": "Private analytic membership rule. Never expose to the semantic reasoner or learner."
+}

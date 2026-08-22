@@ -1,0 +1,32 @@
+{
+  "action_shape": [
+    30,
+    100,
+    2
+  ],
+  "all_exported_trajectories_are": "expert_safe",
+  "dataset_name": "SemTraj2D-speed_limit",
+  "dataset_version": "1.1.0",
+  "horizon": 100,
+  "integrity": {
+    "expert_trajectories.npz": "ede3d3292b27ed8fec52d8bbc9a4a15adb178424d616dd63ea81b13feb3c1327",
+    "splits.json": "ce0e347f44434df8412f4413df0bc32bb948c7f4a24eb559aa76d4ba40ff5659",
+    "task_spec.json": "b89d5e152d3e38abeca788a6c91ca3b8ad7507000e85ad29b69440695c67840f"
+  },
+  "learner_visible_files": [
+    "expert_trajectories.npz",
+    "splits.json",
+    "task_spec.json"
+  ],
+  "n_expert_trajectories": 30,
+  "observation_shape": [
+    30,
+    100,
+    2
+  ],
+  "privacy_note": "No private path, clause, geometry, or numerical constraint parameter is listed here.",
+  "public_array_sha256": "cda4334fdfa6d9bf16da37ee46ec575880f6dac189259afd6bf8fc937f44ab4e",
+  "public_generation_seed": 20260821,
+  "schema_version": 1,
+  "task_instance_id": "speed_limit"
+}

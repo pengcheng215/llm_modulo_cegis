@@ -1,0 +1,79 @@
+{
+  "action_dimension": 6,
+  "clauses": [
+    {
+      "center": 0.0,
+      "clause_id": "height",
+      "feature": "reference_dz",
+      "half_width": 0.038531199803695966,
+      "kind": "equality_band"
+    },
+    {
+      "clause_id": "speed",
+      "features": [
+        "vx",
+        "vy",
+        "vz"
+      ],
+      "kind": "l2_upper_bound",
+      "threshold": 0.4978937969138497
+    },
+    {
+      "clause_id": "tilt",
+      "features": [
+        "roll",
+        "pitch"
+      ],
+      "formula": "acos(cos(roll)*cos(pitch))",
+      "kind": "upright_tilt_upper_bound",
+      "threshold": 0.17895130512251498
+    }
+  ],
+  "composition": "any_violation",
+  "dt": 0.05,
+  "expected_structure": {
+    "clauses": [
+      {
+        "clause_id": "height",
+        "coupling": "joint",
+        "model_family": "linear",
+        "relation": "equality_band",
+        "temporal_operator": "max",
+        "variables": [
+          "target_dz"
+        ]
+      },
+      {
+        "clause_id": "speed",
+        "coupling": "joint",
+        "model_family": "linear",
+        "relation": "upper_bound",
+        "temporal_operator": "max",
+        "variables": [
+          "speed"
+        ]
+      },
+      {
+        "clause_id": "tilt",
+        "coupling": "joint",
+        "model_family": "linear",
+        "relation": "upper_bound",
+        "temporal_operator": "max",
+        "variables": [
+          "tilt_from_vertical"
+        ]
+      }
+    ],
+    "composition": "any_violation",
+    "representable": true
+  },
+  "horizon": 120,
+  "label_convention": {
+    "safe": 0,
+    "violation": 1
+  },
+  "observation_dimension": 12,
+  "schema_version": 1,
+  "task_instance_id": "carrywater_active",
+  "warning": "Private analytic membership rule; never expose to the learner or semantic reasoner."
+}

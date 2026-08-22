@@ -1,0 +1,72 @@
+seed: 7
+device: cpu
+data:
+  dataset_dir: llm_modulo_cegis/data/CarryWaterActive/public/carrywater_active
+  membership_oracle_path: llm_modulo_cegis/data/CarryWaterActive/private/carrywater_active/oracle.json
+  inline_private_evaluation: false
+output_dir: outputs/carrywater_active_smoke
+semantic_reasoner:
+  backend: frozen_bank
+  hypothesis_bank: llm_modulo_cegis/configs/carrywater_active_smoke_bank.json
+semantic:
+  beam_width: 3
+  prune_per_round: 1
+  max_initial_hypotheses: 7
+  allow_fallback: false
+  max_composite_clauses: 3
+model:
+  hidden_dims: [16]
+  ensemble_size: 1
+trainer:
+  epochs: 8
+  learning_rate: 0.003
+  weight_decay: 0.00001
+  margin: 0.2
+  smoothmax_beta: 20.0
+  expert_weight: 2.0
+  query_weight: 1.0
+  violation_weight: 3.0
+  safe_state_weight: 1.0
+  latent_witness_weight: 1.5
+  latent_witness_fraction: 0.1
+  output_regularization: 0.0001
+  bootstrap_queries: false
+  violation_pooling_mode: all_states
+evidence:
+  linear_max_support_gate_enforced: true
+  linear_max_support_tolerance: 0.00001
+  linear_max_minimum_contradictory_anchors: 2
+  minimum_per_label: 2
+  complexity_penalty: 0.015
+  capacity_penalty: 0.012
+  uncertainty_penalty: 0.02
+falsifier:
+  steps: 1
+  smoothmax_beta: 20.0
+  # PoolHypothesisFalsifier selects complete public rollouts, so this shared
+  # continuous-perturbation radius is validated but not applied by the adapter.
+  false_unsafe_trust_radius: 1.0
+  false_unsafe_use_hard_margin: true
+  false_unsafe_radius_ladder: []
+loop:
+  warmup_queries: 12
+  max_warmup_queries: 24
+  minimum_label_count: 2
+  minimum_safe_query_count: 2
+  minimum_violation_query_count: 2
+  warmup_validation_safe_count: 1
+  warmup_validation_violation_count: 1
+  expert_structure_validation: 2
+  outer_rounds: 1
+  queries_per_hypothesis: 0
+  oracle_query_budget_per_round: 1
+  # Slot 0 is a hard false-unsafe probe; slot 1 is a globally constructed
+  # shortcut probe, ensuring this smoke exercises shared acquisition even when
+  # the first-slot hard-margin certificate is unavailable in the finite pool.
+  candidate_pool_per_hypothesis: 2
+  query_hypothesis_beam: 3
+  falsifier_restarts: 1
+  safe_query_boundary_bisection_steps: 0
+  grid_resolution: 16
+  freeze_revisions: true
+  maximum_active_hypotheses: 7

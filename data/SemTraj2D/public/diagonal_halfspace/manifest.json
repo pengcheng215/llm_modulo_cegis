@@ -1,0 +1,32 @@
+{
+  "action_shape": [
+    30,
+    100,
+    2
+  ],
+  "all_exported_trajectories_are": "expert_safe",
+  "dataset_name": "SemTraj2D-diagonal_halfspace",
+  "dataset_version": "1.1.0",
+  "horizon": 100,
+  "integrity": {
+    "expert_trajectories.npz": "38d588f1a6218e72a9981ffe86df3c01fa511abce9fab778a81928521b4c1830",
+    "splits.json": "9f285d4c2d47d2f164f5aae87aa7c0d952813aaf6a77c0f6d7369edd54842d9b",
+    "task_spec.json": "4295d2c0424563a3b0bb9418362baff0b885ebe09d0d3d336806bcbcda1f89e2"
+  },
+  "learner_visible_files": [
+    "expert_trajectories.npz",
+    "splits.json",
+    "task_spec.json"
+  ],
+  "n_expert_trajectories": 30,
+  "observation_shape": [
+    30,
+    100,
+    2
+  ],
+  "privacy_note": "No private path, clause, geometry, or numerical constraint parameter is listed here.",
+  "public_array_sha256": "593411cf46aba1cfa86ada1749487b52df08c0c61c40b7e42852818434c061ca",
+  "public_generation_seed": 20260821,
+  "schema_version": 1,
+  "task_instance_id": "diagonal_halfspace"
+}

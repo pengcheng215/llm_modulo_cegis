@@ -1,0 +1,65 @@
+{
+  "public_generation_seed": 20260821,
+  "schema_version": 1,
+  "suite_name": "SemTraj2D",
+  "suite_version": "1.1.0",
+  "task_count": 8,
+  "tasks": [
+    {
+      "expert_array_sha256": "e0d1dfa9a81fc8fbfe04aecc40e5d54ed840488ea1f1ab538fd995d407ebbc0b",
+      "n_experts": 30,
+      "public_dir": "disk_clean",
+      "public_manifest_sha256": "e7730b3fce73546f6fd10e63f60d585042d49eed3d6729a6ca732a43fe239a28",
+      "task_instance_id": "disk_clean"
+    },
+    {
+      "expert_array_sha256": "e65b754887ec15d7332833de7785c222e4f892c38ddae43eee0a1e6fe81757bb",
+      "n_experts": 30,
+      "public_dir": "disk_upper_proxy",
+      "public_manifest_sha256": "39ac14ea25adaab9b6fa40838e1ffc61223d84410dac19a0f5e81d3323637e62",
+      "task_instance_id": "disk_upper_proxy"
+    },
+    {
+      "expert_array_sha256": "593411cf46aba1cfa86ada1749487b52df08c0c61c40b7e42852818434c061ca",
+      "n_experts": 30,
+      "public_dir": "diagonal_halfspace",
+      "public_manifest_sha256": "4a83e5a663fe2d3fc1c45a60ee71dc0378aa7c34aa66002e1d4dc3b6bc3ea392",
+      "task_instance_id": "diagonal_halfspace"
+    },
+    {
+      "expert_array_sha256": "d9b1df2e268bc5726c8989e3934db75acba4b9a68d7dcd5aa202bfbdd0b52704",
+      "n_experts": 30,
+      "public_dir": "lane_band",
+      "public_manifest_sha256": "45b4d18832d8ccfd30b6001f9f0c61711f5e83069f46eaa1c5d91ccb566b255a",
+      "task_instance_id": "lane_band"
+    },
+    {
+      "expert_array_sha256": "cda4334fdfa6d9bf16da37ee46ec575880f6dac189259afd6bf8fc937f44ab4e",
+      "n_experts": 30,
+      "public_dir": "speed_limit",
+      "public_manifest_sha256": "d96a4b1aa3ab5d8b44d199eb3c9b774d7e5f65006395fa67da76c26759e99ec1",
+      "task_instance_id": "speed_limit"
+    },
+    {
+      "expert_array_sha256": "82e6fdfbce7119efdfb181e75cf5785b8d7d3cf35d972d50eb02e769a39b8a74",
+      "n_experts": 30,
+      "public_dir": "disk_and_speed",
+      "public_manifest_sha256": "a4bd89701edbb0b0e13e6c2b00f7023f64f318ca002c9a6b3c33d33f365d3adf",
+      "task_instance_id": "disk_and_speed"
+    },
+    {
+      "expert_array_sha256": "740cc7a9782f2a2a1937868ea0680c3f45cc2e467dbf3738d565dbb4c39f7b67",
+      "n_experts": 30,
+      "public_dir": "lane_and_speed",
+      "public_manifest_sha256": "9525a75207b86768e70d458a2188185f29ed4d7a911101b534af668f189b7f93",
+      "task_instance_id": "lane_and_speed"
+    },
+    {
+      "expert_array_sha256": "5a02093db916ddc43b6174d11ee75d0904538cbc0551e580c119c640d5bbf0cd",
+      "n_experts": 30,
+      "public_dir": "eventually_visit_open_set",
+      "public_manifest_sha256": "cc803a00a57b5902f0cfca21a7ab884ba95b6ba5c2c184e0c8ab6de5d94af5ec",
+      "task_instance_id": "eventually_visit_open_set"
+    }
+  ]
+}

@@ -14,6 +14,7 @@ dependencies = [
   "PyYAML",
   "transformers>=4.37",
   "safetensors",
+  "openai>=1.0",
 ]
 
 [tool.setuptools.packages.find]

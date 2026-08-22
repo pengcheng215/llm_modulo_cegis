@@ -1,0 +1,107 @@
+schema_version: 1
+experiment_id: carrywater_active_correct_only_vs_full_bank_q48_5seed
+created: 2026-08-21
+seeds: [7, 19, 37, 73, 109]
+
+arms:
+  correct_composite_only:
+    config: llm_modulo_cegis/configs/carrywater_active_q48_correct_only.yaml
+    frozen_hypothesis_bank: llm_modulo_cegis/configs/carrywater_active_q48_correct_only_bank.json
+    active_hypotheses: 1
+    candidate_pool_per_hypothesis: 49
+    query_hypothesis_beam: 1
+    candidate_proposals_per_round: 49
+    purpose: >-
+      Numeric-fitting ceiling with the correct three-clause qualitative structure
+      supplied in advance. Failure localizes the problem to fitting or acquisition,
+      rather than semantic structure selection.
+  full_bank:
+    config: llm_modulo_cegis/configs/carrywater_active_q48_full_bank.yaml
+    frozen_hypothesis_bank: llm_modulo_cegis/configs/carrywater_active_smoke_bank.json
+    active_hypotheses: 7
+    candidate_pool_per_hypothesis: 7
+    query_hypothesis_beam: 7
+    candidate_proposals_per_round: 49
+    purpose: >-
+      Tests whether shared acquisition and public evidence select the correct
+      composite in the presence of atomics and deliberately confounded proxies.
+
+oracle_budget:
+  expected_total_queries: 48
+  warmup_queries: 12
+  warmup_max_queries: 12
+  outer_rounds: 3
+  queries_per_outer_round: 12
+  require_full_round_budget: true
+  expected_round_distribution:
+    round_0_warmup: 12
+    round_1: 12
+    round_2: 12
+    round_3: 12
+  underfill_policy: fail_the_run_do_not_drop_the_seed
+
+controls:
+  device: cpu
+  semantic_backend: frozen_bank
+  freeze_revisions: true
+  llm_interactions_per_run: 0
+  trainer_epochs: 80
+  ensemble_size: 2
+  bootstrap_queries: false
+  violation_pooling_mode: all_states
+  falsifier_restarts: 1
+  retain_best_public_qualified_checkpoint: true
+  calibrate_decision_threshold_during_cegis: true
+  decision_threshold_calibration_labels: disjoint_final_calibration_warmup_family
+  decision_threshold_calibration_label_counts: {safe: 1, violation: 3}
+  decision_threshold_selection_holdout: warmup_validation
+  safe_query_boundary_bisection_steps: 0
+  candidate_proposals_per_round: 49
+  public_candidate_pool_is_identical_across_arms_and_seeds: true
+  warmup_trajectory_hash_must_match_all_runs: true
+  warmup_label_counts: {safe: 3, violation: 9}
+
+evaluation_protocol:
+  training_uses_membership_oracle_only: true
+  inline_private_evaluation: false
+  private_evaluation_timing: posthoc_only_after_training_artifacts_are_frozen
+  private_evaluation_directory: llm_modulo_cegis/data/CarryWaterActive/private/carrywater_active
+  private_metrics_must_not_affect_selection_or_revision: true
+  required_run_checks:
+    - result.oracle_queries_equals_48
+    - oracle_query_log_has_48_unique_trajectory_hashes
+    - oracle_round_distribution_matches_preregistered_counts
+    - every_active_query_is_a_public_pool_rollout_not_used_by_warmup
+    - every_query_passes_the_public_dynamics_validator
+    - private_evaluation_was_not_loaded_before_freeze
+
+primary_public_metrics:
+  - qualified_champion_seed_count
+  - correct_composite_champion_seed_count
+  - correct_composite_eligible_seed_count
+  - final_public_safe_accuracy
+  - final_public_violation_recall
+  - final_public_expert_safe_rate
+  - final_public_fit_expert_safe_rate
+
+posthoc_private_diagnostics:
+  - trajectory_balanced_accuracy
+  - trajectory_worst_pair_target_balanced_accuracy
+  - trajectory_exact_pair_accuracy
+  - trajectory_pair_ranking_accuracy
+  - trajectory_minimum_clause_recall
+  - trajectory_clause_recall
+
+interpretation:
+  correct_only_failure: >-
+    The supplied correct structure cannot be fitted or queried reliably at Q=48;
+    do not attribute the failure to GPT or hypothesis selection.
+  correct_only_success_full_bank_failure: >-
+    Numeric fitting is adequate, but acquisition or public-evidence structure
+    selection cannot reliably eliminate atomic and proxy alternatives.
+  both_arms_success: >-
+    Proceed to matched-budget comparisons against PUCL, an all-feature MLP, and
+    random-query baselines.
+  statistical_limit: >-
+    Five fixed numeric seeds are an engineering stability audit, not a claim of
+    statistical significance.

@@ -4,7 +4,7 @@ task_description: >-
   A planar point robot moves from a start to a goal. Safe demonstrations take
   detours around an unknown persistent obstacle. Infer the hard constraint.
 data:
-  dataset_dir: data/Obstacle2D
+  dataset_dir: llm_modulo_cegis/data/Obstacle2D
 output_dir: outputs/obstacle_avoid_qwen_smoke
 semantic_reasoner:
   backend: local_qwen
@@ -23,15 +23,25 @@ trainer:
   epochs: 2
   learning_rate: 0.003
   bootstrap_queries: false
+  violation_pooling_mode: source_anchor_changed_states
+  violation_pooling_change_tolerance: 0.000001
 evidence:
+  linear_max_support_gate_enforced: true
+  linear_max_support_tolerance: 0.00001
+  linear_max_minimum_contradictory_anchors: 2
   minimum_per_label: 3
 falsifier:
   steps: 2
   max_step: 0.35
 loop:
-  warmup_queries: 20
-  max_warmup_queries: 45
+  warmup_queries: 12
+  max_warmup_queries: 30
   minimum_label_count: 3
+  minimum_safe_query_count: 2
+  minimum_violation_query_count: 4
+  warmup_validation_safe_count: 1
+  warmup_validation_violation_count: 3
+  expert_structure_validation: 2
   outer_rounds: 1
   queries_per_hypothesis: 1
   falsifier_restarts: 1

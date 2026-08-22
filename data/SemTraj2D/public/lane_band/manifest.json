@@ -1,0 +1,32 @@
+{
+  "action_shape": [
+    30,
+    100,
+    2
+  ],
+  "all_exported_trajectories_are": "expert_safe",
+  "dataset_name": "SemTraj2D-lane_band",
+  "dataset_version": "1.1.0",
+  "horizon": 100,
+  "integrity": {
+    "expert_trajectories.npz": "8179f330cb4354acaba069400de794ef0f11250d548440f6ba6d282736178977",
+    "splits.json": "df761f3e7c76eddc1348a1d730c0e185282d6038a619c3cc8a8603271e9990d9",
+    "task_spec.json": "06c7e2a49b582d299589c9b044e93a1ec630c9c5db3d145c181fa855066e9db5"
+  },
+  "learner_visible_files": [
+    "expert_trajectories.npz",
+    "splits.json",
+    "task_spec.json"
+  ],
+  "n_expert_trajectories": 30,
+  "observation_shape": [
+    30,
+    100,
+    2
+  ],
+  "privacy_note": "No private path, clause, geometry, or numerical constraint parameter is listed here.",
+  "public_array_sha256": "d9b1df2e268bc5726c8989e3934db75acba4b9a68d7dcd5aa202bfbdd0b52704",
+  "public_generation_seed": 20260821,
+  "schema_version": 1,
+  "task_instance_id": "lane_band"
+}

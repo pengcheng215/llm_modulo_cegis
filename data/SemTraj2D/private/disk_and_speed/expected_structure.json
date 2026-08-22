@@ -1,0 +1,25 @@
+{
+  "clauses": [
+    {
+      "coupling": "joint",
+      "model_family": "mlp",
+      "relation": "forbidden_region",
+      "temporal_operator": "max",
+      "variables": [
+        "x_position",
+        "y_position"
+      ]
+    },
+    {
+      "coupling": "joint",
+      "model_family": "linear",
+      "relation": "upper_bound",
+      "temporal_operator": "max",
+      "variables": [
+        "speed"
+      ]
+    }
+  ],
+  "composition": "any_violation",
+  "representable": true
+}

@@ -1,0 +1,74 @@
+seed: 7
+device: cpu
+data:
+  dataset_dir: llm_modulo_cegis/data/SemTraj2D/public/disk_upper_proxy
+  membership_oracle_path: llm_modulo_cegis/data/SemTraj2D/private/disk_upper_proxy/oracle.json
+  # Keep the held-out trajectory bank unmounted during fitting. Evaluate the
+  # frozen checkpoint with tools/evaluate_semtraj2d.py in a separate process.
+  inline_private_evaluation: false
+output_dir: outputs/semtraj2d_disk_upper_smoke
+semantic_reasoner:
+  backend: evidence_policy
+semantic:
+  beam_width: 3
+  prune_per_round: 2
+  max_initial_hypotheses: 5
+  allow_fallback: false
+model:
+  hidden_dims: [24, 24]
+  ensemble_size: 2
+trainer:
+  epochs: 30
+  learning_rate: 0.003
+  weight_decay: 0.00001
+  margin: 0.2
+  smoothmax_beta: 20.0
+  expert_weight: 2.0
+  query_weight: 1.0
+  violation_weight: 3.0
+  safe_state_weight: 1.0
+  latent_witness_weight: 1.5
+  latent_witness_fraction: 0.1
+  output_regularization: 0.0001
+  bootstrap_queries: false
+  violation_pooling_mode: source_anchor_changed_states
+  violation_pooling_change_tolerance: 0.000001
+evidence:
+  linear_max_support_gate_enforced: true
+  linear_max_support_tolerance: 0.00001
+  linear_max_minimum_contradictory_anchors: 2
+  minimum_per_label: 2
+  complexity_penalty: 0.015
+  capacity_penalty: 0.012
+  uncertainty_penalty: 0.02
+falsifier:
+  steps: 45
+  learning_rate: 0.025
+  smoothmax_beta: 20.0
+  expert_weight: 0.3
+  smoothness_weight: 0.2
+  length_weight: 1.0
+  boundary_weight: 8.0
+  uncertainty_weight: 0.5
+  step_penalty_weight: 30.0
+  workspace_penalty_weight: 30.0
+  epsilon: 0.05
+  max_step: 0.35
+loop:
+  warmup_queries: 12
+  max_warmup_queries: 30
+  minimum_label_count: 2
+  minimum_safe_query_count: 2
+  minimum_violation_query_count: 2
+  warmup_validation_safe_count: 1
+  warmup_validation_violation_count: 2
+  expert_structure_validation: 4
+  outer_rounds: 1
+  queries_per_hypothesis: 0
+  oracle_query_budget_per_round: 3
+  candidate_pool_per_hypothesis: 2
+  query_hypothesis_beam: 3
+  falsifier_restarts: 1
+  grid_resolution: 70
+  freeze_revisions: true
+  maximum_active_hypotheses: 5

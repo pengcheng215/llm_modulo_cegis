@@ -1,0 +1,241 @@
+{
+  "entries": {
+    "h_carrywater_composite": {
+      "hypothesis": {
+        "hypothesis_id": "h_carrywater_composite",
+        "name": "reference-relative height, speed, and uprightness constraints",
+        "variables": [
+          "target_dz",
+          "speed",
+          "tilt_from_vertical"
+        ],
+        "coupling": "joint",
+        "relation": "equality_band",
+        "temporal_operator": "max",
+        "model_family": "linear",
+        "risk_direction": "stress one physical clause while preserving the other two",
+        "rationale": "Carrying water requires the requested relative height, gentle three-dimensional motion, and an upright cup throughout the trajectory.",
+        "parent_id": null,
+        "generation": 0,
+        "clauses": [
+          {
+            "clause_id": "height_band",
+            "variables": [
+              "target_dz"
+            ],
+            "coupling": "joint",
+            "relation": "equality_band",
+            "temporal_operator": "max",
+            "model_family": "linear",
+            "risk_direction": "increase the absolute reference-relative height error",
+            "rationale": "Tests whether the cup must remain near its requested carrying height rather than at one absolute world height."
+          },
+          {
+            "clause_id": "speed_limit",
+            "variables": [
+              "speed"
+            ],
+            "coupling": "joint",
+            "relation": "upper_bound",
+            "temporal_operator": "max",
+            "model_family": "linear",
+            "risk_direction": "increase direction-invariant translational speed",
+            "rationale": "Tests a gentle-motion limit independent of the direction of travel."
+          },
+          {
+            "clause_id": "tilt_limit",
+            "variables": [
+              "tilt_from_vertical"
+            ],
+            "coupling": "joint",
+            "relation": "upper_bound",
+            "temporal_operator": "max",
+            "model_family": "linear",
+            "risk_direction": "increase cup tilt while allowing yaw rotation",
+            "rationale": "Tests uprightness as physical tilt from vertical rather than as a bound on yaw."
+          }
+        ],
+        "composition": "any_violation"
+      },
+      "status": "active",
+      "retired_round": null,
+      "retired_reason": null
+    },
+    "h_target_dz_band": {
+      "hypothesis": {
+        "hypothesis_id": "h_target_dz_band",
+        "name": "reference-relative height band only",
+        "variables": [
+          "target_dz"
+        ],
+        "coupling": "joint",
+        "relation": "equality_band",
+        "temporal_operator": "max",
+        "model_family": "linear",
+        "risk_direction": "increase the absolute reference-relative height error",
+        "rationale": "Atomic ablation containing only the requested-height clause.",
+        "parent_id": null,
+        "generation": 0,
+        "clauses": [],
+        "composition": "any_violation"
+      },
+      "status": "active",
+      "retired_round": null,
+      "retired_reason": null
+    },
+    "h_speed_3d": {
+      "hypothesis": {
+        "hypothesis_id": "h_speed_3d",
+        "name": "three-dimensional speed limit only",
+        "variables": [
+          "speed"
+        ],
+        "coupling": "joint",
+        "relation": "upper_bound",
+        "temporal_operator": "max",
+        "model_family": "linear",
+        "risk_direction": "increase direction-invariant translational speed",
+        "rationale": "Atomic ablation containing only the gentle-motion clause.",
+        "parent_id": null,
+        "generation": 0,
+        "clauses": [],
+        "composition": "any_violation"
+      },
+      "status": "active",
+      "retired_round": null,
+      "retired_reason": null
+    },
+    "h_tilt_vertical": {
+      "hypothesis": {
+        "hypothesis_id": "h_tilt_vertical",
+        "name": "tilt-from-vertical limit only",
+        "variables": [
+          "tilt_from_vertical"
+        ],
+        "coupling": "joint",
+        "relation": "upper_bound",
+        "temporal_operator": "max",
+        "model_family": "linear",
+        "risk_direction": "increase cup tilt while allowing yaw rotation",
+        "rationale": "Atomic ablation containing only the uprightness clause.",
+        "parent_id": null,
+        "generation": 0,
+        "clauses": [],
+        "composition": "any_violation"
+      },
+      "status": "active",
+      "retired_round": null,
+      "retired_reason": null
+    },
+    "h_world_z_band_proxy": {
+      "hypothesis": {
+        "hypothesis_id": "h_world_z_band_proxy",
+        "name": "absolute world-height proxy",
+        "variables": [
+          "z_position"
+        ],
+        "coupling": "joint",
+        "relation": "equality_band",
+        "temporal_operator": "max",
+        "model_family": "linear",
+        "risk_direction": "move away from one absolute world-frame height",
+        "rationale": "Deliberately confounded proxy: it ignores that the requested carrying height can change between trajectories.",
+        "parent_id": null,
+        "generation": 0,
+        "clauses": [],
+        "composition": "any_violation"
+      },
+      "status": "active",
+      "retired_round": null,
+      "retired_reason": null
+    },
+    "h_x_velocity_speed_proxy": {
+      "hypothesis": {
+        "hypothesis_id": "h_x_velocity_speed_proxy",
+        "name": "x-velocity-as-speed proxy",
+        "variables": [
+          "x_velocity"
+        ],
+        "coupling": "joint",
+        "relation": "upper_bound",
+        "temporal_operator": "max",
+        "model_family": "linear",
+        "risk_direction": "increase positive x-directed velocity",
+        "rationale": "Deliberately incomplete motion proxy: one signed velocity component cannot represent direction-invariant three-dimensional speed.",
+        "parent_id": null,
+        "generation": 0,
+        "clauses": [],
+        "composition": "any_violation"
+      },
+      "status": "active",
+      "retired_round": null,
+      "retired_reason": null
+    },
+    "h_yaw_upright_proxy": {
+      "hypothesis": {
+        "hypothesis_id": "h_yaw_upright_proxy",
+        "name": "yaw-as-uprightness proxy",
+        "variables": [
+          "yaw"
+        ],
+        "coupling": "joint",
+        "relation": "equality_band",
+        "temporal_operator": "max",
+        "model_family": "linear",
+        "risk_direction": "increase absolute yaw rotation",
+        "rationale": "Deliberately incorrect orientation proxy: yaw rotation does not measure whether the cup tilts away from vertical.",
+        "parent_id": null,
+        "generation": 0,
+        "clauses": [],
+        "composition": "any_violation"
+      },
+      "status": "active",
+      "retired_round": null,
+      "retired_reason": null
+    }
+  },
+  "audit_log": [
+    {
+      "outer_round": 0,
+      "event": "add",
+      "hypothesis_id": "h_carrywater_composite",
+      "reason": "audited CarryWaterActive smoke bank"
+    },
+    {
+      "outer_round": 0,
+      "event": "add",
+      "hypothesis_id": "h_target_dz_band",
+      "reason": "audited CarryWaterActive smoke bank"
+    },
+    {
+      "outer_round": 0,
+      "event": "add",
+      "hypothesis_id": "h_speed_3d",
+      "reason": "audited CarryWaterActive smoke bank"
+    },
+    {
+      "outer_round": 0,
+      "event": "add",
+      "hypothesis_id": "h_tilt_vertical",
+      "reason": "audited CarryWaterActive smoke bank"
+    },
+    {
+      "outer_round": 0,
+      "event": "add",
+      "hypothesis_id": "h_world_z_band_proxy",
+      "reason": "audited CarryWaterActive smoke bank"
+    },
+    {
+      "outer_round": 0,
+      "event": "add",
+      "hypothesis_id": "h_x_velocity_speed_proxy",
+      "reason": "audited CarryWaterActive smoke bank"
+    },
+    {
+      "outer_round": 0,
+      "event": "add",
+      "hypothesis_id": "h_yaw_upright_proxy",
+      "reason": "audited CarryWaterActive smoke bank"
+    }
+  ]
+}

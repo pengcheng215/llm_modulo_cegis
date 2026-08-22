@@ -1,0 +1,36 @@
+{
+  "clauses": [
+    {
+      "clause_id": "height",
+      "coupling": "joint",
+      "model_family": "linear",
+      "relation": "equality_band",
+      "temporal_operator": "max",
+      "variables": [
+        "target_dz"
+      ]
+    },
+    {
+      "clause_id": "speed",
+      "coupling": "joint",
+      "model_family": "linear",
+      "relation": "upper_bound",
+      "temporal_operator": "max",
+      "variables": [
+        "speed"
+      ]
+    },
+    {
+      "clause_id": "tilt",
+      "coupling": "joint",
+      "model_family": "linear",
+      "relation": "upper_bound",
+      "temporal_operator": "max",
+      "variables": [
+        "tilt_from_vertical"
+      ]
+    }
+  ],
+  "composition": "any_violation",
+  "representable": true
+}

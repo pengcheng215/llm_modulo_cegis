@@ -1,0 +1,24 @@
+{
+  "clauses": [
+    {
+      "coupling": "joint",
+      "model_family": "linear",
+      "relation": "equality_band",
+      "temporal_operator": "max",
+      "variables": [
+        "y_position"
+      ]
+    },
+    {
+      "coupling": "joint",
+      "model_family": "linear",
+      "relation": "upper_bound",
+      "temporal_operator": "max",
+      "variables": [
+        "speed"
+      ]
+    }
+  ],
+  "composition": "any_violation",
+  "representable": true
+}

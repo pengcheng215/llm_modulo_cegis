@@ -1,0 +1,38 @@
+{
+  "test": [
+    "expert_0024",
+    "expert_0028",
+    "expert_0009",
+    "expert_0022",
+    "expert_0001",
+    "expert_0008"
+  ],
+  "train": [
+    "expert_0006",
+    "expert_0014",
+    "expert_0003",
+    "expert_0000",
+    "expert_0004",
+    "expert_0016",
+    "expert_0015",
+    "expert_0005",
+    "expert_0019",
+    "expert_0023",
+    "expert_0011",
+    "expert_0007",
+    "expert_0012",
+    "expert_0020",
+    "expert_0010",
+    "expert_0018",
+    "expert_0017",
+    "expert_0026"
+  ],
+  "validation": [
+    "expert_0025",
+    "expert_0002",
+    "expert_0027",
+    "expert_0013",
+    "expert_0021",
+    "expert_0029"
+  ]
+}

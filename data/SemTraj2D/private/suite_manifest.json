@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "suite_name": "SemTraj2D",
+  "suite_version": "1.1.0",
+  "task_count": 8,
+  "tasks": [
+    {
+      "evaluation_array_sha256": "39cd0d62bdd26ba81603bdb0493d3dbd383d7f82d5cc3e8702bdfed167840b9e",
+      "evaluation_class_counts": {
+        "0": 192,
+        "1": 192
+      },
+      "n_evaluation": 384,
+      "task_instance_id": "disk_clean"
+    },
+    {
+      "evaluation_array_sha256": "39cd0d62bdd26ba81603bdb0493d3dbd383d7f82d5cc3e8702bdfed167840b9e",
+      "evaluation_class_counts": {
+        "0": 192,
+        "1": 192
+      },
+      "n_evaluation": 384,
+      "task_instance_id": "disk_upper_proxy"
+    },
+    {
+      "evaluation_array_sha256": "368ffed410da06543d3706ec0b9c6f2c2470f5f13e77773e9e0c7814f086edfe",
+      "evaluation_class_counts": {
+        "0": 192,
+        "1": 192
+      },
+      "n_evaluation": 384,
+      "task_instance_id": "diagonal_halfspace"
+    },
+    {
+      "evaluation_array_sha256": "b8e727a278046641714c81f69e69ca25c96cce68420c846df1be4b13aac9f9d9",
+      "evaluation_class_counts": {
+        "0": 192,
+        "1": 192
+      },
+      "n_evaluation": 384,
+      "task_instance_id": "lane_band"
+    },
+    {
+      "evaluation_array_sha256": "b3c742a0a07229005065c8b058f1efbdfd4070e5070d5793c58dc5ed4d3593db",
+      "evaluation_class_counts": {
+        "0": 192,
+        "1": 192
+      },
+      "n_evaluation": 384,
+      "task_instance_id": "speed_limit"
+    },
+    {
+      "evaluation_array_sha256": "1f764a1f38bc42a65757f40dfb5dce0a56f36b556f3fafb4bea4937a60e5dece",
+      "evaluation_class_counts": {
+        "0": 336,
+        "1": 336
+      },
+      "n_evaluation": 672,
+      "task_instance_id": "disk_and_speed"
+    },
+    {
+      "evaluation_array_sha256": "ec45218121444e3fc052d7e80536fc4591dec7b2035f33ccfa9e17db5503c6b3",
+      "evaluation_class_counts": {
+        "0": 336,
+        "1": 336
+      },
+      "n_evaluation": 672,
+      "task_instance_id": "lane_and_speed"
+    },
+    {
+      "evaluation_array_sha256": "55a20b2ad7508144c5ef5f14177b756b96c0b3ef89dd7a091e44f0774856f2a1",
+      "evaluation_class_counts": {
+        "0": 192,
+        "1": 192
+      },
+      "n_evaluation": 384,
+      "task_instance_id": "eventually_visit_open_set"
+    }
+  ]
+}

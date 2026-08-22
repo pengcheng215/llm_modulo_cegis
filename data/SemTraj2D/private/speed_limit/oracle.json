@@ -1,0 +1,16 @@
+{
+  "clauses": [
+    {
+      "clause_id": "speed",
+      "kind": "speed_upper_bound",
+      "threshold": 0.18218464848184596
+    }
+  ],
+  "composition": "any_violation",
+  "label_convention": {
+    "safe": 0,
+    "violation": 1
+  },
+  "schema_version": 1,
+  "warning": "Private analytic membership rule. Never expose to the semantic reasoner or learner."
+}

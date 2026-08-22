@@ -1,0 +1,84 @@
+seed: 7
+device: cpu
+task_description: >-
+  A planar point robot moves from a start to a goal. Safe demonstrations take
+  detours around an unknown persistent obstacle. Infer which observed or derived
+  variables define the hard trajectory constraint and learn its numerical boundary.
+data:
+  dataset_dir: llm_modulo_cegis/data/Obstacle2D
+output_dir: outputs/safe_acquisition_global_ablation
+semantic_reasoner:
+  backend: evidence_policy
+  model_name_or_path: llm_guided_cegis/models/Qwen2.5-1.5B-Instruct
+  local_files_only: true
+  max_new_tokens: 1200
+semantic:
+  beam_width: 3
+  prune_per_round: 2
+  max_initial_hypotheses: 6
+  allow_fallback: true
+model:
+  hidden_dims: [24, 24]
+  ensemble_size: 2
+trainer:
+  epochs: 35
+  learning_rate: 0.003
+  weight_decay: 0.00001
+  margin: 0.2
+  smoothmax_beta: 20.0
+  expert_weight: 2.0
+  query_weight: 1.0
+  violation_weight: 3.0
+  safe_state_weight: 1.0
+  latent_witness_weight: 1.5
+  latent_witness_fraction: 0.1
+  output_regularization: 0.0001
+  bootstrap_queries: true
+  # Historical acquisition ablation: pin the pre-mask numeric learner.
+  violation_pooling_mode: all_states
+  violation_pooling_change_tolerance: 0.000001
+evidence:
+  # Preserve the historical pre-structural-gate acquisition comparison.
+  linear_max_support_gate_enforced: false
+  linear_max_support_tolerance: 0.00001
+  linear_max_minimum_contradictory_anchors: 2
+  minimum_per_label: 3
+  complexity_penalty: 0.015
+  capacity_penalty: 0.012
+  uncertainty_penalty: 0.02
+falsifier:
+  steps: 45
+  learning_rate: 0.025
+  smoothmax_beta: 20.0
+  expert_weight: 0.3
+  smoothness_weight: 0.2
+  length_weight: 1.0
+  boundary_weight: 8.0
+  uncertainty_weight: 0.5
+  step_penalty_weight: 30.0
+  workspace_penalty_weight: 30.0
+  epsilon: 0.05
+  max_step: 0.35
+loop:
+  warmup_queries: 12
+  max_warmup_queries: 30
+  minimum_label_count: 3
+  minimum_safe_query_count: 2
+  minimum_violation_query_count: 4
+  warmup_validation_safe_count: 1
+  warmup_validation_violation_count: 3
+  expert_structure_validation: 2
+  outer_rounds: 2
+  queries_per_hypothesis: 1
+  oracle_query_budget_per_round: 3
+  candidate_pool_per_hypothesis: 2
+  query_hypothesis_beam: 3
+  candidate_history_deduplication_rms: 0.0001
+  minimum_safe_label_fraction: 0.35
+  minimum_violation_label_fraction: 0.35
+  reserve_label_seeking_queries: false
+  safe_query_boundary_bisection_steps: 0
+  falsifier_restarts: 1
+  grid_resolution: 70
+  freeze_revisions: false
+  maximum_active_hypotheses: 6

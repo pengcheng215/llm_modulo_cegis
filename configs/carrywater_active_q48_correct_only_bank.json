@@ -1,0 +1,73 @@
+{
+  "entries": {
+    "h_carrywater_composite": {
+      "hypothesis": {
+        "hypothesis_id": "h_carrywater_composite",
+        "name": "reference-relative height, speed, and uprightness constraints",
+        "variables": [
+          "target_dz",
+          "speed",
+          "tilt_from_vertical"
+        ],
+        "coupling": "joint",
+        "relation": "equality_band",
+        "temporal_operator": "max",
+        "model_family": "linear",
+        "risk_direction": "stress one physical clause while preserving the other two",
+        "rationale": "Carrying water requires the requested relative height, gentle three-dimensional motion, and an upright cup throughout the trajectory.",
+        "parent_id": null,
+        "generation": 0,
+        "clauses": [
+          {
+            "clause_id": "height_band",
+            "variables": [
+              "target_dz"
+            ],
+            "coupling": "joint",
+            "relation": "equality_band",
+            "temporal_operator": "max",
+            "model_family": "linear",
+            "risk_direction": "increase the absolute reference-relative height error",
+            "rationale": "Tests whether the cup must remain near its requested carrying height rather than at one absolute world height."
+          },
+          {
+            "clause_id": "speed_limit",
+            "variables": [
+              "speed"
+            ],
+            "coupling": "joint",
+            "relation": "upper_bound",
+            "temporal_operator": "max",
+            "model_family": "linear",
+            "risk_direction": "increase direction-invariant translational speed",
+            "rationale": "Tests a gentle-motion limit independent of the direction of travel."
+          },
+          {
+            "clause_id": "tilt_limit",
+            "variables": [
+              "tilt_from_vertical"
+            ],
+            "coupling": "joint",
+            "relation": "upper_bound",
+            "temporal_operator": "max",
+            "model_family": "linear",
+            "risk_direction": "increase cup tilt while allowing yaw rotation",
+            "rationale": "Tests uprightness as physical tilt from vertical rather than as a bound on yaw."
+          }
+        ],
+        "composition": "any_violation"
+      },
+      "status": "active",
+      "retired_round": null,
+      "retired_reason": null
+    }
+  },
+  "audit_log": [
+    {
+      "outer_round": 0,
+      "event": "add",
+      "hypothesis_id": "h_carrywater_composite",
+      "reason": "preregistered correct-structure numeric-fitting ceiling"
+    }
+  ]
+}
